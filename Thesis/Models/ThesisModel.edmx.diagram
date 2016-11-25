@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="30adc4792cd645f787f8819851a3bcef" Name="Diagram1">
+        <EntityTypeShape EntityType="ThesisModel.Company" Width="1.5" PointX="3" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.CompaniesForUser" Width="1.5" PointX="5.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.DailyMenuDetail" Width="1.5" PointX="8.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.DailyMenuHead" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.DishCategory" Width="1.5" PointX="7.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.Dish" Width="1.5" PointX="6" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.Level" Width="1.5" PointX="3" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.Order" Width="1.5" PointX="5.25" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.RolesForUser" Width="1.5" PointX="11" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.Room" Width="1.5" PointX="5.25" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.State" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.UserFavorite" Width="1.5" PointX="8.25" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.UserRole" Width="1.5" PointX="8.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ThesisModel.User" Width="1.5" PointX="3" PointY="10.25" IsExpanded="true" />
+        <AssociationConnector Association="ThesisModel.FK_Companies_States" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_CompaniesForUsers_Companies" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_Rooms_Companies" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_CompaniesForUsers_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_DailyMenuDetail_DailyMenuHead" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_DailyMenuDetail_Dishes" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_DailyMenuHead_States" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_Orders_DailyMenuHead" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_Orders_Dishes" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_UserFavorites_Dishes" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_Rooms_Levels" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_Orders_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_RolesForUsers_UserRoles" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_Users_States" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_UserFavorites_Users" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
