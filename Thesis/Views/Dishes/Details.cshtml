@@ -1,0 +1,42 @@
+﻿@model Thesis.Models.Dish
+
+@{
+    ViewBag.Title = "Részletek";
+}
+
+<h2>Részletek</h2>
+
+<div>
+    <h4>Étel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DishCategory.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DishCategory.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Módosítás", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Vissza az ételekhez", "Index")
+</p>

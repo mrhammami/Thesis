@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Thesis.Models.Dish>
+
+@{
+    ViewBag.Title = "Ételek";
+}
+
+<h2>Ételek</h2>
+
+<p>
+    @Html.ActionLink("Új étel", "Create", new { controller="Dishes"}, new { @class="btn btn-default"})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DishCategory.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DishCategory.Name)
+        </td>
+        <td>
+            @Html.ActionLink("Módosítás", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Részletek", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Törlés", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Ételkategóriák", "Index", new { controller="DishCategories"}, new { @class="btn btn-primary btn-lg"})
+</p>

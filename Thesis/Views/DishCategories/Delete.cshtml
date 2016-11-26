@@ -1,0 +1,31 @@
+﻿@model Thesis.Models.DishCategory
+
+@{
+    ViewBag.Title = "Törlés";
+}
+
+<h2>Törlés</h2>
+
+<h3>Biztosan törölni akarja az alábbi tételt?</h3>
+<div>
+    <h4>Ételkategória</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Törlés" class="btn btn-default" /> |
+            @Html.ActionLink("Vissza a listához", "Index")
+        </div>
+    }
+</div>
