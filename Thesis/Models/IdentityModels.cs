@@ -29,5 +29,7 @@ namespace Thesis.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Thesis.Models.State> States { get; set; }
     }
 }

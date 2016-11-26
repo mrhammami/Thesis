@@ -4,12 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ThesisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ThesisModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Companies">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="StatusID" Type="int" Nullable="false" />
         </EntityType>
@@ -17,7 +17,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="CompanyID" Type="int" Nullable="false" />
         </EntityType>
@@ -25,7 +25,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DishID" Type="int" Nullable="false" />
           <Property Name="MenuHeadID" Type="int" Nullable="false" />
         </EntityType>
@@ -33,7 +33,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MenuDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="StatusID" Type="int" Nullable="false" />
         </EntityType>
@@ -41,29 +41,30 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="Dishes">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Price" Type="int" Nullable="false" />
+          <Property Name="DishCategoryID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Levels">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="DishID" Type="int" Nullable="false" />
           <Property Name="MenuHeadID" Type="int" Nullable="false" />
@@ -72,7 +73,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="RoleID" Type="int" Nullable="false" />
         </EntityType>
@@ -80,7 +81,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="CompanyID" Type="int" />
           <Property Name="LevelID" Type="int" Nullable="false" />
@@ -89,14 +90,14 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="UserFavorites">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="DishID" Type="int" Nullable="false" />
         </EntityType>
@@ -111,7 +112,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="ActivationCode" Type="nvarchar" MaxLength="255" Nullable="false" />
@@ -188,6 +189,18 @@
             </Principal>
             <Dependent Role="DailyMenuHead">
               <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Dishes_DishCategory">
+          <End Role="DishCategory" Type="Self.DishCategory" Multiplicity="1" />
+          <End Role="Dishes" Type="Self.Dishes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DishCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Dishes">
+              <PropertyRef Name="DishCategoryID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -338,6 +351,10 @@
             <End Role="States" EntitySet="States" />
             <End Role="DailyMenuHead" EntitySet="DailyMenuHead" />
           </AssociationSet>
+          <AssociationSet Name="FK_Dishes_DishCategory" Association="Self.FK_Dishes_DishCategory">
+            <End Role="DishCategory" EntitySet="DishCategory" />
+            <End Role="Dishes" EntitySet="Dishes" />
+          </AssociationSet>
           <AssociationSet Name="FK_Orders_DailyMenuHead" Association="Self.FK_Orders_DailyMenuHead">
             <End Role="DailyMenuHead" EntitySet="DailyMenuHead" />
             <End Role="Orders" EntitySet="Orders" />
@@ -375,8 +392,7 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ThesisModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -428,6 +444,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Dishes" Relationship="ThesisModel.FK_Dishes_DishCategory" FromRole="DishCategory" ToRole="Dish" />
         </EntityType>
         <EntityType Name="Dish">
           <Key>
@@ -439,6 +456,8 @@
           <NavigationProperty Name="DailyMenuDetails" Relationship="Self.FK_DailyMenuDetail_Dishes" FromRole="Dishes" ToRole="DailyMenuDetail" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Dishes" FromRole="Dishes" ToRole="Orders" />
           <NavigationProperty Name="UserFavorites" Relationship="Self.FK_UserFavorites_Dishes" FromRole="Dishes" ToRole="UserFavorites" />
+          <Property Name="DishCategoryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DishCategory" Relationship="ThesisModel.FK_Dishes_DishCategory" FromRole="Dish" ToRole="DishCategory" />
         </EntityType>
         <EntityType Name="Level">
           <Key>
@@ -779,7 +798,23 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="UserFavorites" EntitySet="UserFavorites" />
           </AssociationSet>
+          <AssociationSet Name="FK_Dishes_DishCategory" Association="ThesisModel.FK_Dishes_DishCategory">
+            <End Role="DishCategory" EntitySet="DishCategories" />
+            <End Role="Dish" EntitySet="Dishes" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_Dishes_DishCategory">
+          <End Type="ThesisModel.DishCategory" Role="DishCategory" Multiplicity="1" />
+          <End Type="ThesisModel.Dish" Role="Dish" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DishCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Dish">
+              <PropertyRef Name="DishCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -833,6 +868,7 @@
           <EntitySetMapping Name="Dishes">
             <EntityTypeMapping TypeName="ThesisModel.Dish">
               <MappingFragment StoreEntitySet="Dishes">
+                <ScalarProperty Name="DishCategoryID" ColumnName="DishCategoryID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Price" ColumnName="Price" />

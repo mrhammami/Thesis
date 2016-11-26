@@ -14,7 +14,16 @@ namespace Thesis.Models
     
     public partial class DishCategory
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public DishCategory()
+        {
+            this.Dishes = new HashSet<Dish>();
+        }
+    
         public int ID { get; set; }
         public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Dish> Dishes { get; set; }
     }
 }

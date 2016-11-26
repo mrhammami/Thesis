@@ -222,6 +222,7 @@
     <Compile Include="Models\DishCategory.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DishViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Level.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
@@ -343,6 +344,9 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Home\DishList.cshtml" />
+    <Content Include="Views\Home\DishEdit.cshtml" />
+    <Content Include="Views\Home\DishCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

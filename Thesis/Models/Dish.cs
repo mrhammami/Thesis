@@ -25,6 +25,7 @@ namespace Thesis.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
+        public int DishCategoryID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DailyMenuDetail> DailyMenuDetails { get; set; }
@@ -32,5 +33,6 @@ namespace Thesis.Models
         public virtual ICollection<Order> Orders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserFavorite> UserFavorites { get; set; }
+        public virtual DishCategory DishCategory { get; set; }
     }
 }

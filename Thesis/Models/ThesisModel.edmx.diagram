@@ -34,6 +34,7 @@
         <AssociationConnector Association="ThesisModel.FK_RolesForUsers_UserRoles" ManuallyRouted="false" />
         <AssociationConnector Association="ThesisModel.FK_Users_States" ManuallyRouted="false" />
         <AssociationConnector Association="ThesisModel.FK_UserFavorites_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="ThesisModel.FK_Dishes_DishCategory" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
