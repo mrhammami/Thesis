@@ -1,34 +1,37 @@
 ﻿@model Thesis.Models.DailyMenuDetail
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Részletek";
 }
 
-<h2>Details</h2>
+<h2>Részletek</h2>
 
 <div>
-    <h4>DailyMenuDetail</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.DailyMenuHead.ID)
+            @Html.DisplayNameFor(model => model.DailyMenuHead.MenuDate)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.DailyMenuHead.ID)
+            @Html.DisplayFor(model => model.DailyMenuHead.MenuDate)
         </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.Dish.Name)
         </dt>
-
         <dd>
             @Html.DisplayFor(model => model.Dish.Name)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Dish.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Dish.Price)
+        </dd>
+
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Módosítás", "Módosítás", new { id = Model.ID }) |
+    @Html.ActionLink("Vissza a menühöz", "Index")
 </p>

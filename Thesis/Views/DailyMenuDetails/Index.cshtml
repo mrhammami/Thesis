@@ -26,12 +26,12 @@
     </div>
 </div>
 <p>
-    @Html.ActionLink("Étel hozzáadása menühöz", "Create")
+    @Html.ActionLink("Étel hozzáadása menühöz", "Create", null, new { @class="btn btn-default"})
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.DailyMenuHead.ID)
+            @Html.DisplayNameFor(model => model.DailyMenuHead.MenuDate)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Dish.Name)
@@ -45,7 +45,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.DailyMenuHead.ID)
+            @Html.DisplayFor(modelItem => item.DailyMenuHead.MenuDate)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Dish.Name)
@@ -54,9 +54,7 @@
             @Html.DisplayFor(modelItem => item.Dish.DishCategory.Name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Törlés menüből", "Delete", new { id=item.ID}, new { @class="btn btn-default"})
         </td>
     </tr>
 }
