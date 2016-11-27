@@ -1,13 +1,32 @@
 ﻿@model IEnumerable<Thesis.Models.DailyMenuDetail>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Napi menü";
 }
 
-<h2>Index</h2>
-
+<h2>Mai menü</h2>
+<div class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button id="dishCategoryNavbarButton" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".menu2">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Mind", "Index", "DailyMenuDetails", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse menu2">
+            <ul class="nav navbar-nav">
+                @foreach (var dc in ViewBag.DishCategoryList)
+                {
+                    <li>@Html.ActionLink((dc as Thesis.Models.DishCategory).Name, "Index", new { dishCategory = (dc as Thesis.Models.DishCategory).ID })</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Étel hozzáadása menühöz", "Create")
 </p>
 <table class="table">
     <tr>
@@ -16,6 +35,9 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Dish.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Dish.DishCategory.Name)
         </th>
         <th></th>
     </tr>
@@ -27,6 +49,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Dish.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Dish.DishCategory.Name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

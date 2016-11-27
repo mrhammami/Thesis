@@ -15,9 +15,10 @@ namespace Thesis.Controllers
         private Entities db = new Entities();
 
         // GET: DailyMenuDetails
-        public ActionResult Index()
+        public ActionResult Index(int? dishCategory = null)
         {
-            var dailyMenuDetails = db.DailyMenuDetails.Include(d => d.DailyMenuHead).Include(d => d.Dish);
+            var dailyMenuDetails = db.DailyMenuDetails.Include(d => d.DailyMenuHead).Include(d => d.Dish).Where(d => (d.Dish.DishCategoryID == dishCategory) || (dishCategory == null)).OrderBy(d => d.Dish.DishCategoryID);
+            ViewBag.DishCategoryList = db.DishCategories.ToList();
             return View(dailyMenuDetails.ToList());
         }
 

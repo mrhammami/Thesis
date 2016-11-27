@@ -228,7 +228,9 @@
     <Compile Include="Models\DishCategory.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DishCategoryViewModel.cs" />
     <Compile Include="Models\DishViewModel.cs" />
+    <Compile Include="Models\DishViewModell.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Level.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>

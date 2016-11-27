@@ -6,20 +6,24 @@ using System.Web;
 
 namespace Thesis.Models
 {
+    [MetadataType(typeof(DishViewModel))]
+    public partial class Dish
+    {
+
+    }
     public class DishViewModel
     {
-        public int ID { get; set; }
-
-        [Required(AllowEmptyStrings = false, ErrorMessage ="A mező megadása kötelező.")]
-        [Display(Name="Név")]
-        public string Name { get; set; }
-
-        [Required(ErrorMessage = "A mező megadása kötelező.")]
-        [Display(Name = "Ár")]
-        [Range(10, int.MaxValue, ErrorMessage ="A megadott érték nem megfelelő.")]
+        [Display(Name="Ár")]
+        [Required(ErrorMessage = "A mező kitöltése kötelező.")]
+        [Range(10, int.MaxValue, ErrorMessage = "A megadott érték nem megfelelő.")]
         public int Price { get; set; }
 
-        [Display(Name="Kategória")]
+        [Display(Name = "Név")]
+        [Required(ErrorMessage = "A mező kitöltése kötelező.")]
+        public string Name { get; set; }
+
+        [Display(Name = "Étel kategóriája")]
+        [Required(ErrorMessage = "A mező kitöltése kötelező.")]
         public int DishCategoryID { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace Thesis.Controllers
         [HttpGet]
         public ActionResult DishCreate()
         {
-            return View(new DishViewModel());
+            return View(new DishViewModell());
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Thesis.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DishCreate(DishViewModel newDish)
+        public ActionResult DishCreate(DishViewModell newDish)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace Thesis.Controllers
             if (dishID != null)
             {
                 Dish editDish = Entities.Dishes.Where(d => d.ID == dishID).FirstOrDefault();
-                DishViewModel dvm = new DishViewModel()
+                DishViewModell dvm = new DishViewModell()
                 {
                     ID = editDish.ID,
                     Name = editDish.Name,
@@ -103,7 +103,7 @@ namespace Thesis.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DishEdit(DishViewModel newDish)
+        public ActionResult DishEdit(DishViewModell newDish)
         {
             if (ModelState.IsValid)
             {
