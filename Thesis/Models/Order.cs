@@ -18,6 +18,9 @@ namespace Thesis.Models
         public int UserID { get; set; }
         public int DishID { get; set; }
         public int MenuHeadID { get; set; }
+        public bool IsOrdered { get; set; }
+        public System.DateTime OrderDate { get; set; }
+        public int Amount { get; set; }
     
         public virtual DailyMenuHead DailyMenuHead { get; set; }
         public virtual Dish Dish { get; set; }

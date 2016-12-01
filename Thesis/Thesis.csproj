@@ -223,6 +223,7 @@
     <Compile Include="Models\DailyMenuHead.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DailyMenuHeadViewModel.cs" />
     <Compile Include="Models\Dish.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
@@ -231,7 +232,6 @@
     </Compile>
     <Compile Include="Models\DishCategoryViewModel.cs" />
     <Compile Include="Models\DishViewModel.cs" />
-    <Compile Include="Models\DishViewModell.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Level.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
@@ -240,6 +240,8 @@
     <Compile Include="Models\Order.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrdersAndMenuDetailsViewModel.cs" />
+    <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\RolesForUser.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
@@ -273,6 +275,7 @@
     <Compile Include="Models\UserRole.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -308,6 +311,7 @@
       <DependentUpon>ThesisModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\CustomScripts.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

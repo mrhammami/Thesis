@@ -18,7 +18,7 @@ namespace Thesis.Models
         [Range(10, int.MaxValue, ErrorMessage = "A megadott érték nem megfelelő.")]
         public int Price { get; set; }
 
-        [Display(Name = "Név")]
+        [Display(Name = "Étel neve")]
         [Required(ErrorMessage = "A mező kitöltése kötelező.")]
         public string Name { get; set; }
 

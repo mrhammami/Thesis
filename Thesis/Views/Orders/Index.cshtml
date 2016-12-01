@@ -1,45 +1,132 @@
-﻿@model IEnumerable<Thesis.Models.Order>
+﻿@model Thesis.Models.OrdersAndMenuDetailsViewModel
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Rendelés";
+}
+<script type="text/javascript" src='@Url.Content("~/Scripts/CustomScripts.js")'></script>
+<script>
+    var updateURL = '@Url.Action("UpdateCartAmount", "Orders")';
+</script>
+
+
+<h2>Kosaram</h2>
+
+@using (Html.BeginForm("OrderConfirm", "Orders", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayOrder.DailyMenuHead.MenuDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayOrder.Dish.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayOrder.Amount)
+            </th>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisplayOrder.Dish.Price)
+            </th>
+        </tr>
+
+
+        @foreach (var item in Model.Orders)
+        {
+                <tr>
+                    @Html.HiddenFor(modelItem => item.ID, new { @class = "itemID" })
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DailyMenuHead.MenuDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dish.Name)
+                    </td>
+                    <td>
+                        @Html.HiddenFor(modelItem => item.Dish.Price, new { @class = "UnitPriceFor" })
+                        @Html.EditorFor(modelItem => item.Amount, new { htmlAttributes = new { @class = "form-control orderAmountControl", @id = ("AmountFor_" + item.ID) } })
+                        @Html.ValidationMessageFor(modelItem => item.Amount, "", new { @class = "text-danger" })
+                    </td>
+                    <td>
+                        @Html.ActionLink("Törlés", "Delete", new { id = item.ID }, new { @class = "btn btn-default" })
+                    </td>
+                    <td>
+                        <span class="PriceFor" id="PriceFor_@item.ID">@(item.Amount * item.Dish.Price) Ft</span>
+                    </td>
+                </tr>
+        }
+        <tr>
+            <td>
+                <input id="OrderSubmitButton" type="submit" value="Megrendelés (@Model.OrderTotalSummary Ft)" class="btn btn-primary btn-lg" />
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    
 }
 
-<h2>Index</h2>
+<h2>Mai menü</h2>
+<div class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button id="dishCategoryNavbarButton" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".menu2">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Mind", "Index", "Orders", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse menu2">
+            <ul class="nav navbar-nav">
+                @foreach (var dc in Model.DisplayDishCategories)
+                {
+                    <li>@Html.ActionLink((dc as Thesis.Models.DishCategory).Name, "Index", new { dishCategory = (dc as Thesis.Models.DishCategory).ID })</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.DailyMenuHead.ID)
+            @Html.DisplayNameFor(model => model.DisplayMenuDetail.DailyMenuHead.MenuDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Dish.Name)
+            @Html.DisplayNameFor(model => model.DisplayOrder.Dish.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.Name)
+            @Html.DisplayNameFor(model => model.DisplayOrder.Dish.DishCategory.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DisplayOrder.Dish.Price)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.DailyMenuHead.ID)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Dish.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model.MenuDetails)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DailyMenuHead.MenuDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dish.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dish.DishCategory.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dish.Price)
+            </td>
+            <td>
+                @Html.ActionLink("Hozzáadás rendeléshez", "AddToCart", "Orders", new { dishID = item.Dish.ID }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
 
 </table>

@@ -15,14 +15,17 @@ namespace Thesis.Controllers
         private Entities db = new Entities();
 
         // GET: Orders
-        public ActionResult Index()
+        public ActionResult Index(int? dishCategory = null)
         {
-            var orders = db.Orders.Include(o => o.DailyMenuHead).Include(o => o.Dish).Include(o => o.User);
-            return View(orders.ToList());
+            OrdersAndMenuDetailsViewModel omdModel = new OrdersAndMenuDetailsViewModel();
+            omdModel.Orders = db.Orders.Where(o => o.IsOrdered == false).Include(o => o.DailyMenuHead).Include(o => o.Dish).Include(o => o.User).OrderBy(d => d.Dish.DishCategoryID);
+            omdModel.MenuDetails = db.DailyMenuDetails.Include(d => d.DailyMenuHead).Include(d => d.Dish).Where(d => (d.Dish.DishCategoryID == dishCategory) || (dishCategory == null)).OrderBy(d => d.Dish.DishCategoryID);
+            omdModel.DisplayDishCategories = db.DishCategories.OrderBy(d => d.ID).ToList();
+            return View(omdModel);
         }
 
         // GET: Orders/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id)    
         {
             if (id == null)
             {
@@ -45,6 +48,24 @@ namespace Thesis.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult OrderConfirm()
+        {
+            //Mivel minden bent van az adatbázisban,
+            //mindössze át kell állítani az IsOrdered kapcsolót
+            //Usert httpcontext-ből, menuhead-et dátumból
+            List<Order> otm = db.Orders.Where(i => i.UserID == 2 && i.MenuHeadID == 1).ToList();
+            //frissítésük
+            foreach (var item in otm)
+            {
+                item.IsOrdered = true;
+                db.Entry(item).State = EntityState.Modified;
+            }
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         // POST: Orders/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -54,6 +75,7 @@ namespace Thesis.Controllers
         {
             if (ModelState.IsValid)
             {
+                order.OrderDate = DateTime.Now;
                 db.Orders.Add(order);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -126,6 +148,54 @@ namespace Thesis.Controllers
             db.Orders.Remove(order);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// Hozzáadás mai kosárhoz
+        /// </summary>
+        /// <param name="dishID">A hozzáadandó étel ID-ja.</param>
+        /// <returns></returns>
+        public ActionResult AddToCart(int? dishID = null)
+        {
+            if (dishID.HasValue)
+            {
+                Order order = new Order()
+                {
+                    Amount = 1,
+                    DishID = dishID.Value,
+                    IsOrdered = false,
+                    OrderDate = DateTime.Now,
+                    UserID = 2,
+                    MenuHeadID = 1
+                };
+                db.Orders.Add(order);
+                db.Entry(order).State = EntityState.Added;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+        
+        /// <summary>
+        /// A rendelés mennyiségének módosítása.
+        /// </summary>
+        /// <param name="updatedOrder">A módosítandó rendeléstétel.</param>
+        /// <returns></returns>
+        public ActionResult UpdateCartAmount(Order updatedOrder)
+        {
+            var modifiedOrder = db.Orders.Where(o => o.ID == updatedOrder.ID).FirstOrDefault();
+            if (updatedOrder != null &&
+                modifiedOrder != null &&
+                0 < updatedOrder.Amount && 
+                updatedOrder.Amount < 100 )
+            {
+                modifiedOrder.Amount = updatedOrder.Amount;
+                db.Entry(modifiedOrder).State = EntityState.Modified;
+                db.SaveChanges();
+                // A teljes összeg újraszámolása
+                int priceSum = db.Orders.Where(o => o.MenuHeadID == modifiedOrder.MenuHeadID && o.IsOrdered==false).Sum(o => o.Amount * o.Dish.Price);
+                return Json(new { PriceFor = modifiedOrder.Amount*modifiedOrder.Dish.Price,   status = "Success", message = "Success", priceSum = priceSum });
+            }
+            return Json(new { status = "Error", message = "Nem érvényes adatok" });
         }
 
         protected override void Dispose(bool disposing)

@@ -6,20 +6,21 @@
     <title>@ViewBag.Title - Érdi Étterem</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
 
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button id="mainNavbarButton" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <button id="mainNavbarButton" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".main-menu">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Kezdőlap", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-collapse collapse">
+            <div class="navbar-collapse collapse main-menu">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Ételek", "Index", "Dishes")</li>
                     <li>@Html.ActionLink("Cégek", "Index", "Companies")</li>
