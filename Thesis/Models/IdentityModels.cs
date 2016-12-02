@@ -21,7 +21,7 @@ namespace Thesis.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("AuthEntities", throwIfV1Schema: false)
         {
         }
 
@@ -31,5 +31,6 @@ namespace Thesis.Models
         }
 
         public System.Data.Entity.DbSet<Thesis.Models.State> States { get; set; }
+        
     }
 }

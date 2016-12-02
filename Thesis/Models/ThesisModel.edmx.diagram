@@ -35,6 +35,13 @@
         <AssociationConnector Association="ThesisModel.FK_Users_States" ManuallyRouted="false" />
         <AssociationConnector Association="ThesisModel.FK_UserFavorites_Users" ManuallyRouted="false" />
         <AssociationConnector Association="ThesisModel.FK_Dishes_DishCategory" />
+        <EntityTypeShape EntityType="ThesisModel.AspNetRole" Width="1.5" PointX="10.375" PointY="5.5" />
+        <EntityTypeShape EntityType="ThesisModel.AspNetUserClaim" Width="1.5" PointX="14.875" PointY="6.625" />
+        <EntityTypeShape EntityType="ThesisModel.AspNetUserLogin" Width="1.5" PointX="14.875" PointY="4" />
+        <EntityTypeShape EntityType="ThesisModel.AspNetUser" Width="1.5" PointX="12.625" PointY="4.375" />
+        <AssociationConnector Association="ThesisModel.FK_dbo_ApplicationUserClaims_dbo_ApplicationUsers_UserId" />
+        <AssociationConnector Association="ThesisModel.FK_dbo_ApplicationUserLogins_dbo_ApplicationUsers_UserId" />
+        <AssociationConnector Association="ThesisModel.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

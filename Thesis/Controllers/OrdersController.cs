@@ -14,13 +14,59 @@ namespace Thesis.Controllers
     {
         private Entities db = new Entities();
 
+        /// <summary>
+        /// A menü és rendelések listája, kategóriánként.
+        /// Ha nincs megadva kategória, akkor mind megjelenik.
+        /// </summary>
+        /// <param name="dishCategory">A kért ételkategória.</param>
+        /// <returns>Lista nézet.</returns>
         // GET: Orders
         public ActionResult Index(int? dishCategory = null)
         {
+            //Ha nincs erre a napra még menü, akkor csinálunk egyet, DEBUG miatt
+            DateTime dt = DateTime.Now.Date;
+            if (!db.DailyMenuHeads
+                .Where(d => DbFunctions.TruncateTime(d.MenuDate) == dt)
+                .Any())
+            {
+                DailyMenuHead mh = new DailyMenuHead() { MenuDate = DateTime.Now, StatusID = 1 };
+                db.DailyMenuHeads.Add(mh);
+                db.Entry(mh).State = EntityState.Added;
+                db.SaveChanges();
+                var menuDetailsToAdd = db.Dishes
+                    .Where(d => d.ID > 2 && d.ID < 41)
+                    .ToList();
+                foreach (var item in menuDetailsToAdd)
+                {
+                    DailyMenuDetail md = new DailyMenuDetail()
+                    {
+                        MenuHeadID = mh.ID,
+                        DishID = item.ID
+                    };
+                    db.DailyMenuDetails.Add(md);
+                    db.Entry(md).State = EntityState.Added;
+                }
+                db.SaveChanges();
+            }
+
+
             OrdersAndMenuDetailsViewModel omdModel = new OrdersAndMenuDetailsViewModel();
-            omdModel.Orders = db.Orders.Where(o => o.IsOrdered == false).Include(o => o.DailyMenuHead).Include(o => o.Dish).Include(o => o.User).OrderBy(d => d.Dish.DishCategoryID);
-            omdModel.MenuDetails = db.DailyMenuDetails.Include(d => d.DailyMenuHead).Include(d => d.Dish).Where(d => (d.Dish.DishCategoryID == dishCategory) || (dishCategory == null)).OrderBy(d => d.Dish.DishCategoryID);
-            omdModel.DisplayDishCategories = db.DishCategories.OrderBy(d => d.ID).ToList();
+            omdModel.Orders = db.Orders
+                .Where(o => o.IsOrdered == false && 
+                    DbFunctions.TruncateTime(o.DailyMenuHead.MenuDate) == dt) // ide még kell a user
+                .Include(o => o.DailyMenuHead)
+                .Include(o => o.Dish)
+                .Include(o => o.User)
+                .OrderBy(d => d.Dish.DishCategoryID);
+            omdModel.MenuDetails = db.DailyMenuDetails
+                .Include(d => d.DailyMenuHead)
+                .Include(d => d.Dish)
+                .Where(d => ((d.Dish.DishCategoryID == dishCategory) || (dishCategory == null)) &&
+                    DbFunctions.TruncateTime(d.DailyMenuHead.MenuDate) == dt)
+                .OrderBy(d => d.Dish.DishCategoryID);
+            omdModel.DisplayDishCategories = db.DishCategories
+                .OrderBy(d => d.ID)
+                .ToList();
             return View(omdModel);
         }
 
@@ -157,7 +203,9 @@ namespace Thesis.Controllers
         /// <returns></returns>
         public ActionResult AddToCart(int? dishID = null)
         {
-            if (dishID.HasValue)
+            AspNetUser currentUser = db.AspNetUsers.Where(u => u.UserName == HttpContext.User.Identity.Name).FirstOrDefault();
+            int? mh = db.DailyMenuHeads.Select(m => m.ID).LastOrDefault();
+            if (dishID.HasValue && mh.HasValue && currentUser != null)
             {
                 Order order = new Order()
                 {
@@ -166,7 +214,7 @@ namespace Thesis.Controllers
                     IsOrdered = false,
                     OrderDate = DateTime.Now,
                     UserID = 2,
-                    MenuHeadID = 1
+                    MenuHeadID = mh.Value
                 };
                 db.Orders.Add(order);
                 db.Entry(order).State = EntityState.Added;
