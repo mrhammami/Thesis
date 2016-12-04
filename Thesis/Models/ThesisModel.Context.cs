@@ -25,6 +25,10 @@ namespace Thesis.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<CompaniesForUser> CompaniesForUsers { get; set; }
         public virtual DbSet<DailyMenuDetail> DailyMenuDetails { get; set; }
@@ -32,16 +36,12 @@ namespace Thesis.Models
         public virtual DbSet<DishCategory> DishCategories { get; set; }
         public virtual DbSet<Dish> Dishes { get; set; }
         public virtual DbSet<Level> Levels { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<RolesForUser> RolesForUsers { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<UserFavorite> UserFavorites { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
-        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
-        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
     }
 }

@@ -15,7 +15,14 @@ namespace Thesis.Models
         public int? OrderTotalSummary {
             get
             {
-                return Orders.Sum(x => x.Amount * x.Dish.Price);
+                if (this.Orders.Count() > 0)
+                {
+                    return Orders.Sum(x => x.Amount * x.Dish.Price);
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
 

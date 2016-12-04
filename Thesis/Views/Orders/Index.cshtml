@@ -17,9 +17,6 @@
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DisplayOrder.DailyMenuHead.MenuDate)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DisplayOrder.Dish.Name)
             </th>
             <th>
@@ -36,9 +33,6 @@
         {
                 <tr>
                     @Html.HiddenFor(modelItem => item.ID, new { @class = "itemID" })
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DailyMenuHead.MenuDate)
-                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Dish.Name)
                     </td>
@@ -94,9 +88,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.DisplayMenuDetail.DailyMenuHead.MenuDate)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.DisplayOrder.Dish.Name)
         </th>
         <th>
@@ -111,9 +102,6 @@
     @foreach (var item in Model.MenuDetails)
     {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DailyMenuHead.MenuDate)
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Dish.Name)
             </td>

@@ -18,7 +18,6 @@ namespace Thesis.Models
         public User()
         {
             this.CompaniesForUsers = new HashSet<CompaniesForUser>();
-            this.Orders = new HashSet<Order>();
             this.UserFavorites = new HashSet<UserFavorite>();
         }
     
@@ -32,8 +31,6 @@ namespace Thesis.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CompaniesForUser> CompaniesForUsers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
         public virtual State State { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserFavorite> UserFavorites { get; set; }

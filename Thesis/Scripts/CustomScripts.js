@@ -3,7 +3,6 @@
         e.preventDefault();
         var dishID = $(this).closest('tr').find('.itemID').val();
         var amount = $(this).val();
-        var unitPrice = $(this).siblings('.UnitPriceFor').val();
         var sumPrice = $(this).closest('tr').find('.PriceFor');
 
         $.ajax({

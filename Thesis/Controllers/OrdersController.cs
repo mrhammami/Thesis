@@ -23,6 +23,11 @@ namespace Thesis.Controllers
         // GET: Orders
         public ActionResult Index(int? dishCategory = null)
         {
+            AspNetUser currentUser = db.AspNetUsers.Where(u => u.UserName == HttpContext.User.Identity.Name).FirstOrDefault();
+            bool hasCurrentUser = currentUser == null;
+            if (hasCurrentUser)
+                return RedirectToAction("Index","Home");
+
             //Ha nincs erre a napra még menü, akkor csinálunk egyet, DEBUG miatt
             DateTime dt = DateTime.Now.Date;
             if (!db.DailyMenuHeads
@@ -49,14 +54,13 @@ namespace Thesis.Controllers
                 db.SaveChanges();
             }
 
-
             OrdersAndMenuDetailsViewModel omdModel = new OrdersAndMenuDetailsViewModel();
             omdModel.Orders = db.Orders
                 .Where(o => o.IsOrdered == false && 
-                    DbFunctions.TruncateTime(o.DailyMenuHead.MenuDate) == dt) // ide még kell a user
+                    DbFunctions.TruncateTime(o.DailyMenuHead.MenuDate) == dt &&
+                    o.UserID == currentUser.Id)
                 .Include(o => o.DailyMenuHead)
                 .Include(o => o.Dish)
-                .Include(o => o.User)
                 .OrderBy(d => d.Dish.DishCategoryID);
             omdModel.MenuDetails = db.DailyMenuDetails
                 .Include(d => d.DailyMenuHead)
@@ -98,15 +102,18 @@ namespace Thesis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult OrderConfirm()
         {
+            AspNetUser currentUser = db.AspNetUsers.Where(u => u.UserName == HttpContext.User.Identity.Name).FirstOrDefault();
             //Mivel minden bent van az adatbázisban,
             //mindössze át kell állítani az IsOrdered kapcsolót
-            //Usert httpcontext-ből, menuhead-et dátumból
-            List<Order> otm = db.Orders.Where(i => i.UserID == 2 && i.MenuHeadID == 1).ToList();
-            //frissítésük
-            foreach (var item in otm)
+            List<Order> otm = db.Orders.Where(i => i.UserID == currentUser.Id && i.MenuHeadID == db.DailyMenuHeads.Max(m => m.ID)).ToList();
+            // Ha van rendelés, akkor frissítjük őket
+            if (otm != null && otm.Count > 0)
             {
-                item.IsOrdered = true;
-                db.Entry(item).State = EntityState.Modified;
+                foreach (var item in otm)
+                {
+                    item.IsOrdered = true;
+                    db.Entry(item).State = EntityState.Modified;
+                } 
             }
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -204,8 +211,8 @@ namespace Thesis.Controllers
         public ActionResult AddToCart(int? dishID = null)
         {
             AspNetUser currentUser = db.AspNetUsers.Where(u => u.UserName == HttpContext.User.Identity.Name).FirstOrDefault();
-            int? mh = db.DailyMenuHeads.Select(m => m.ID).LastOrDefault();
-            if (dishID.HasValue && mh.HasValue && currentUser != null)
+            int? mh = db.DailyMenuHeads.Max(m => m.ID);
+            if (dishID.HasValue && mh != null && currentUser != null)
             {
                 Order order = new Order()
                 {
@@ -213,7 +220,7 @@ namespace Thesis.Controllers
                     DishID = dishID.Value,
                     IsOrdered = false,
                     OrderDate = DateTime.Now,
-                    UserID = 2,
+                    UserID = currentUser.Id,
                     MenuHeadID = mh.Value
                 };
                 db.Orders.Add(order);

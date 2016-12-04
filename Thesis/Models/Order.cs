@@ -15,7 +15,7 @@ namespace Thesis.Models
     public partial class Order
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public int DishID { get; set; }
         public int MenuHeadID { get; set; }
         public bool IsOrdered { get; set; }
@@ -24,6 +24,5 @@ namespace Thesis.Models
     
         public virtual DailyMenuHead DailyMenuHead { get; set; }
         public virtual Dish Dish { get; set; }
-        public virtual User User { get; set; }
     }
 }

@@ -116,7 +116,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="DishID" Type="int" Nullable="false" />
           <Property Name="MenuHeadID" Type="int" Nullable="false" />
           <Property Name="IsOrdered" Type="bit" Nullable="false" />
@@ -166,7 +166,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="ActivationCode" Type="nvarchar" MaxLength="255" Nullable="false" />
@@ -338,18 +338,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_RolesForUsers_UserRoles">
           <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="1" />
           <End Role="RolesForUsers" Type="Self.RolesForUsers" Multiplicity="*" />
@@ -494,10 +482,6 @@
             <End Role="Dishes" EntitySet="Dishes" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
           <AssociationSet Name="FK_RolesForUsers_UserRoles" Association="Self.FK_RolesForUsers_UserRoles">
             <End Role="UserRoles" EntitySet="UserRoles" />
             <End Role="RolesForUsers" EntitySet="RolesForUsers" />
@@ -527,419 +511,24 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ThesisModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Company">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="StatusID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="State" Relationship="Self.FK_Companies_States" FromRole="Companies" ToRole="States" />
-          <NavigationProperty Name="CompaniesForUsers" Relationship="Self.FK_CompaniesForUsers_Companies" FromRole="Companies" ToRole="CompaniesForUsers" />
-          <NavigationProperty Name="Rooms" Relationship="Self.FK_Rooms_Companies" FromRole="Companies" ToRole="Rooms" />
-        </EntityType>
-        <EntityType Name="CompaniesForUser">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="CompanyID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Company" Relationship="Self.FK_CompaniesForUsers_Companies" FromRole="CompaniesForUsers" ToRole="Companies" />
-          <NavigationProperty Name="User" Relationship="Self.FK_CompaniesForUsers_Users" FromRole="CompaniesForUsers" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="DailyMenuDetail">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="DishID" Type="Int32" Nullable="false" />
-          <Property Name="MenuHeadID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DailyMenuHead" Relationship="Self.FK_DailyMenuDetail_DailyMenuHead" FromRole="DailyMenuDetail" ToRole="DailyMenuHead" />
-          <NavigationProperty Name="Dish" Relationship="Self.FK_DailyMenuDetail_Dishes" FromRole="DailyMenuDetail" ToRole="Dishes" />
-        </EntityType>
-        <EntityType Name="DailyMenuHead">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="MenuDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="StatusID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DailyMenuDetails" Relationship="Self.FK_DailyMenuDetail_DailyMenuHead" FromRole="DailyMenuHead" ToRole="DailyMenuDetail" />
-          <NavigationProperty Name="State" Relationship="Self.FK_DailyMenuHead_States" FromRole="DailyMenuHead" ToRole="States" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_DailyMenuHead" FromRole="DailyMenuHead" ToRole="Orders" />
-        </EntityType>
-        <EntityType Name="DishCategory">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Dishes" Relationship="ThesisModel.FK_Dishes_DishCategory" FromRole="DishCategory" ToRole="Dish" />
-        </EntityType>
-        <EntityType Name="Dish">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Price" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DailyMenuDetails" Relationship="Self.FK_DailyMenuDetail_Dishes" FromRole="Dishes" ToRole="DailyMenuDetail" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Dishes" FromRole="Dishes" ToRole="Orders" />
-          <NavigationProperty Name="UserFavorites" Relationship="Self.FK_UserFavorites_Dishes" FromRole="Dishes" ToRole="UserFavorites" />
-          <Property Name="DishCategoryID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DishCategory" Relationship="ThesisModel.FK_Dishes_DishCategory" FromRole="Dish" ToRole="DishCategory" />
-        </EntityType>
-        <EntityType Name="Level">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Rooms" Relationship="Self.FK_Rooms_Levels" FromRole="Levels" ToRole="Rooms" />
-        </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="DishID" Type="Int32" Nullable="false" />
-          <Property Name="MenuHeadID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DailyMenuHead" Relationship="Self.FK_Orders_DailyMenuHead" FromRole="Orders" ToRole="DailyMenuHead" />
-          <NavigationProperty Name="Dish" Relationship="Self.FK_Orders_Dishes" FromRole="Orders" ToRole="Dishes" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
-          <Property Name="IsOrdered" Type="Boolean" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Amount" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="RolesForUser">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="RoleID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="UserRole" Relationship="Self.FK_RolesForUsers_UserRoles" FromRole="RolesForUsers" ToRole="UserRoles" />
-        </EntityType>
-        <EntityType Name="Room">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="CompanyID" Type="Int32" />
-          <Property Name="LevelID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Company" Relationship="Self.FK_Rooms_Companies" FromRole="Rooms" ToRole="Companies" />
-          <NavigationProperty Name="Level" Relationship="Self.FK_Rooms_Levels" FromRole="Rooms" ToRole="Levels" />
-        </EntityType>
-        <EntityType Name="State">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Companies" Relationship="Self.FK_Companies_States" FromRole="States" ToRole="Companies" />
-          <NavigationProperty Name="DailyMenuHeads" Relationship="Self.FK_DailyMenuHead_States" FromRole="States" ToRole="DailyMenuHead" />
-          <NavigationProperty Name="Users" Relationship="Self.FK_Users_States" FromRole="States" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="UserFavorite">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="DishID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Dish" Relationship="Self.FK_UserFavorites_Dishes" FromRole="UserFavorites" ToRole="Dishes" />
-          <NavigationProperty Name="User" Relationship="Self.FK_UserFavorites_Users" FromRole="UserFavorites" ToRole="Users" />
-        </EntityType>
-        <EntityType Name="UserRole">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="RolesForUsers" Relationship="Self.FK_RolesForUsers_UserRoles" FromRole="UserRoles" ToRole="RolesForUsers" />
-        </EntityType>
-        <EntityType Name="User">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ActivationCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="RegistrationDate" Type="DateTime" Precision="7" />
-          <Property Name="ActivationDate" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="StatusID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CompaniesForUsers" Relationship="Self.FK_CompaniesForUsers_Users" FromRole="Users" ToRole="CompaniesForUsers" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
-          <NavigationProperty Name="State" Relationship="Self.FK_Users_States" FromRole="Users" ToRole="States" />
-          <NavigationProperty Name="UserFavorites" Relationship="Self.FK_UserFavorites_Users" FromRole="Users" ToRole="UserFavorites" />
-        </EntityType>
-        <Association Name="FK_Companies_States">
-          <End Role="States" Type="Self.State" Multiplicity="1" />
-          <End Role="Companies" Type="Self.Company" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="States">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Companies">
-              <PropertyRef Name="StatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CompaniesForUsers_Companies">
-          <End Role="Companies" Type="Self.Company" Multiplicity="1" />
-          <End Role="CompaniesForUsers" Type="Self.CompaniesForUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Companies">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CompaniesForUsers">
-              <PropertyRef Name="CompanyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Rooms_Companies">
-          <End Role="Companies" Type="Self.Company" Multiplicity="0..1" />
-          <End Role="Rooms" Type="Self.Room" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Companies">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Rooms">
-              <PropertyRef Name="CompanyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CompaniesForUsers_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="CompaniesForUsers" Type="Self.CompaniesForUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CompaniesForUsers">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DailyMenuDetail_DailyMenuHead">
-          <End Role="DailyMenuHead" Type="Self.DailyMenuHead" Multiplicity="1" />
-          <End Role="DailyMenuDetail" Type="Self.DailyMenuDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DailyMenuHead">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="DailyMenuDetail">
-              <PropertyRef Name="MenuHeadID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DailyMenuDetail_Dishes">
-          <End Role="Dishes" Type="Self.Dish" Multiplicity="1" />
-          <End Role="DailyMenuDetail" Type="Self.DailyMenuDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Dishes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="DailyMenuDetail">
-              <PropertyRef Name="DishID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DailyMenuHead_States">
-          <End Role="States" Type="Self.State" Multiplicity="1" />
-          <End Role="DailyMenuHead" Type="Self.DailyMenuHead" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="States">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="DailyMenuHead">
-              <PropertyRef Name="StatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orders_DailyMenuHead">
-          <End Role="DailyMenuHead" Type="Self.DailyMenuHead" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DailyMenuHead">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="MenuHeadID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orders_Dishes">
-          <End Role="Dishes" Type="Self.Dish" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Dishes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="DishID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserFavorites_Dishes">
-          <End Role="Dishes" Type="Self.Dish" Multiplicity="1" />
-          <End Role="UserFavorites" Type="Self.UserFavorite" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Dishes">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserFavorites">
-              <PropertyRef Name="DishID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Rooms_Levels">
-          <End Role="Levels" Type="Self.Level" Multiplicity="1" />
-          <End Role="Rooms" Type="Self.Room" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Levels">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Rooms">
-              <PropertyRef Name="LevelID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Orders_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Orders">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RolesForUsers_UserRoles">
-          <End Role="UserRoles" Type="Self.UserRole" Multiplicity="1" />
-          <End Role="RolesForUsers" Type="Self.RolesForUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="UserRoles">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="RolesForUsers">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Users_States">
-          <End Role="States" Type="Self.State" Multiplicity="1" />
-          <End Role="Users" Type="Self.User" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="States">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Users">
-              <PropertyRef Name="StatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_UserFavorites_Users">
-          <End Role="Users" Type="Self.User" Multiplicity="1" />
-          <End Role="UserFavorites" Type="Self.UserFavorite" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="UserFavorites">
-              <PropertyRef Name="UserID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Companies" EntityType="Self.Company" />
-          <EntitySet Name="CompaniesForUsers" EntityType="Self.CompaniesForUser" />
-          <EntitySet Name="DailyMenuDetails" EntityType="Self.DailyMenuDetail" />
-          <EntitySet Name="DailyMenuHeads" EntityType="Self.DailyMenuHead" />
-          <EntitySet Name="DishCategories" EntityType="Self.DishCategory" />
-          <EntitySet Name="Dishes" EntityType="Self.Dish" />
-          <EntitySet Name="Levels" EntityType="Self.Level" />
-          <EntitySet Name="Orders" EntityType="Self.Order" />
-          <EntitySet Name="RolesForUsers" EntityType="Self.RolesForUser" />
-          <EntitySet Name="Rooms" EntityType="Self.Room" />
-          <EntitySet Name="States" EntityType="Self.State" />
-          <EntitySet Name="UserFavorites" EntityType="Self.UserFavorite" />
-          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
-          <EntitySet Name="Users" EntityType="Self.User" />
-          <AssociationSet Name="FK_Companies_States" Association="Self.FK_Companies_States">
-            <End Role="States" EntitySet="States" />
-            <End Role="Companies" EntitySet="Companies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CompaniesForUsers_Companies" Association="Self.FK_CompaniesForUsers_Companies">
-            <End Role="Companies" EntitySet="Companies" />
-            <End Role="CompaniesForUsers" EntitySet="CompaniesForUsers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rooms_Companies" Association="Self.FK_Rooms_Companies">
-            <End Role="Companies" EntitySet="Companies" />
-            <End Role="Rooms" EntitySet="Rooms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CompaniesForUsers_Users" Association="Self.FK_CompaniesForUsers_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="CompaniesForUsers" EntitySet="CompaniesForUsers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DailyMenuDetail_DailyMenuHead" Association="Self.FK_DailyMenuDetail_DailyMenuHead">
-            <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
-            <End Role="DailyMenuDetail" EntitySet="DailyMenuDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DailyMenuDetail_Dishes" Association="Self.FK_DailyMenuDetail_Dishes">
-            <End Role="Dishes" EntitySet="Dishes" />
-            <End Role="DailyMenuDetail" EntitySet="DailyMenuDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DailyMenuHead_States" Association="Self.FK_DailyMenuHead_States">
-            <End Role="States" EntitySet="States" />
-            <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_DailyMenuHead" Association="Self.FK_Orders_DailyMenuHead">
-            <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_Dishes" Association="Self.FK_Orders_Dishes">
-            <End Role="Dishes" EntitySet="Dishes" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserFavorites_Dishes" Association="Self.FK_UserFavorites_Dishes">
-            <End Role="Dishes" EntitySet="Dishes" />
-            <End Role="UserFavorites" EntitySet="UserFavorites" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rooms_Levels" Association="Self.FK_Rooms_Levels">
-            <End Role="Levels" EntitySet="Levels" />
-            <End Role="Rooms" EntitySet="Rooms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="Orders" EntitySet="Orders" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RolesForUsers_UserRoles" Association="Self.FK_RolesForUsers_UserRoles">
-            <End Role="UserRoles" EntitySet="UserRoles" />
-            <End Role="RolesForUsers" EntitySet="RolesForUsers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Users_States" Association="Self.FK_Users_States">
-            <End Role="States" EntitySet="States" />
-            <End Role="Users" EntitySet="Users" />
-          </AssociationSet>
-          <AssociationSet Name="FK_UserFavorites_Users" Association="Self.FK_UserFavorites_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="UserFavorites" EntitySet="UserFavorites" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Dishes_DishCategory" Association="ThesisModel.FK_Dishes_DishCategory">
-            <End Role="DishCategory" EntitySet="DishCategories" />
-            <End Role="Dish" EntitySet="Dishes" />
-          </AssociationSet>
           <EntitySet Name="AspNetRoles" EntityType="ThesisModel.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="ThesisModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="ThesisModel.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="ThesisModel.AspNetUser" />
+          <EntitySet Name="Companies" EntityType="ThesisModel.Company" />
+          <EntitySet Name="CompaniesForUsers" EntityType="ThesisModel.CompaniesForUser" />
+          <EntitySet Name="DailyMenuDetails" EntityType="ThesisModel.DailyMenuDetail" />
+          <EntitySet Name="DailyMenuHeads" EntityType="ThesisModel.DailyMenuHead" />
+          <EntitySet Name="DishCategories" EntityType="ThesisModel.DishCategory" />
+          <EntitySet Name="Dishes" EntityType="ThesisModel.Dish" />
+          <EntitySet Name="Levels" EntityType="ThesisModel.Level" />
+          <EntitySet Name="RolesForUsers" EntityType="ThesisModel.RolesForUser" />
+          <EntitySet Name="Rooms" EntityType="ThesisModel.Room" />
+          <EntitySet Name="States" EntityType="ThesisModel.State" />
+          <EntitySet Name="UserFavorites" EntityType="ThesisModel.UserFavorite" />
+          <EntitySet Name="UserRoles" EntityType="ThesisModel.UserRole" />
+          <EntitySet Name="Users" EntityType="ThesisModel.User" />
           <AssociationSet Name="FK_dbo_ApplicationUserClaims_dbo_ApplicationUsers_UserId" Association="ThesisModel.FK_dbo_ApplicationUserClaims_dbo_ApplicationUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
@@ -948,23 +537,72 @@
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
           </AssociationSet>
+          <AssociationSet Name="FK_Companies_States" Association="ThesisModel.FK_Companies_States">
+            <End Role="State" EntitySet="States" />
+            <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompaniesForUsers_Companies" Association="ThesisModel.FK_CompaniesForUsers_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="CompaniesForUser" EntitySet="CompaniesForUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rooms_Companies" Association="ThesisModel.FK_Rooms_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Room" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CompaniesForUsers_Users" Association="ThesisModel.FK_CompaniesForUsers_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="CompaniesForUser" EntitySet="CompaniesForUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DailyMenuDetail_DailyMenuHead" Association="ThesisModel.FK_DailyMenuDetail_DailyMenuHead">
+            <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
+            <End Role="DailyMenuDetail" EntitySet="DailyMenuDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DailyMenuDetail_Dishes" Association="ThesisModel.FK_DailyMenuDetail_Dishes">
+            <End Role="Dish" EntitySet="Dishes" />
+            <End Role="DailyMenuDetail" EntitySet="DailyMenuDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DailyMenuHead_States" Association="ThesisModel.FK_DailyMenuHead_States">
+            <End Role="State" EntitySet="States" />
+            <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Dishes_DishCategory" Association="ThesisModel.FK_Dishes_DishCategory">
+            <End Role="DishCategory" EntitySet="DishCategories" />
+            <End Role="Dish" EntitySet="Dishes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavorites_Dishes" Association="ThesisModel.FK_UserFavorites_Dishes">
+            <End Role="Dish" EntitySet="Dishes" />
+            <End Role="UserFavorite" EntitySet="UserFavorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rooms_Levels" Association="ThesisModel.FK_Rooms_Levels">
+            <End Role="Level" EntitySet="Levels" />
+            <End Role="Room" EntitySet="Rooms" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RolesForUsers_UserRoles" Association="ThesisModel.FK_RolesForUsers_UserRoles">
+            <End Role="UserRole" EntitySet="UserRoles" />
+            <End Role="RolesForUser" EntitySet="RolesForUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_States" Association="ThesisModel.FK_Users_States">
+            <End Role="State" EntitySet="States" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserFavorites_Users" Association="ThesisModel.FK_UserFavorites_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserFavorite" EntitySet="UserFavorites" />
+          </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="ThesisModel.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
-        </EntityContainer>
-        <Association Name="FK_Dishes_DishCategory">
-          <End Type="ThesisModel.DishCategory" Role="DishCategory" Multiplicity="1" />
-          <End Type="ThesisModel.Dish" Role="Dish" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DishCategory">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Dish">
-              <PropertyRef Name="DishCategoryID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+          <EntitySet Name="Orders" EntityType="ThesisModel.Order" />
+          <AssociationSet Name="FK_Orders_DailyMenuHead" Association="ThesisModel.FK_Orders_DailyMenuHead">
+            <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Dishes" Association="ThesisModel.FK_Orders_Dishes">
+            <End Role="Dish" EntitySet="Dishes" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="AspNetRole">
           <Key>
             <PropertyRef Name="Id" />
@@ -1014,6 +652,140 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="ThesisModel.FK_dbo_ApplicationUserLogins_dbo_ApplicationUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="AspNetRoles" Relationship="ThesisModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
         </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="State" Relationship="ThesisModel.FK_Companies_States" FromRole="Company" ToRole="State" />
+          <NavigationProperty Name="CompaniesForUsers" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="Company" ToRole="CompaniesForUser" />
+          <NavigationProperty Name="Rooms" Relationship="ThesisModel.FK_Rooms_Companies" FromRole="Company" ToRole="Room" />
+        </EntityType>
+        <EntityType Name="CompaniesForUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="CompaniesForUser" ToRole="Company" />
+          <NavigationProperty Name="User" Relationship="ThesisModel.FK_CompaniesForUsers_Users" FromRole="CompaniesForUser" ToRole="User" />
+        </EntityType>
+        <EntityType Name="DailyMenuDetail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DishID" Type="Int32" Nullable="false" />
+          <Property Name="MenuHeadID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DailyMenuHead" Relationship="ThesisModel.FK_DailyMenuDetail_DailyMenuHead" FromRole="DailyMenuDetail" ToRole="DailyMenuHead" />
+          <NavigationProperty Name="Dish" Relationship="ThesisModel.FK_DailyMenuDetail_Dishes" FromRole="DailyMenuDetail" ToRole="Dish" />
+        </EntityType>
+        <EntityType Name="DailyMenuHead">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DailyMenuDetails" Relationship="ThesisModel.FK_DailyMenuDetail_DailyMenuHead" FromRole="DailyMenuHead" ToRole="DailyMenuDetail" />
+          <NavigationProperty Name="State" Relationship="ThesisModel.FK_DailyMenuHead_States" FromRole="DailyMenuHead" ToRole="State" />
+          <NavigationProperty Name="Orders" Relationship="ThesisModel.FK_Orders_DailyMenuHead" FromRole="DailyMenuHead" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="DishCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Dishes" Relationship="ThesisModel.FK_Dishes_DishCategory" FromRole="DishCategory" ToRole="Dish" />
+        </EntityType>
+        <EntityType Name="Dish">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Int32" Nullable="false" />
+          <Property Name="DishCategoryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DailyMenuDetails" Relationship="ThesisModel.FK_DailyMenuDetail_Dishes" FromRole="Dish" ToRole="DailyMenuDetail" />
+          <NavigationProperty Name="DishCategory" Relationship="ThesisModel.FK_Dishes_DishCategory" FromRole="Dish" ToRole="DishCategory" />
+          <NavigationProperty Name="UserFavorites" Relationship="ThesisModel.FK_UserFavorites_Dishes" FromRole="Dish" ToRole="UserFavorite" />
+          <NavigationProperty Name="Orders" Relationship="ThesisModel.FK_Orders_Dishes" FromRole="Dish" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Level">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Rooms" Relationship="ThesisModel.FK_Rooms_Levels" FromRole="Level" ToRole="Room" />
+        </EntityType>
+        <EntityType Name="RolesForUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserRole" Relationship="ThesisModel.FK_RolesForUsers_UserRoles" FromRole="RolesForUser" ToRole="UserRole" />
+        </EntityType>
+        <EntityType Name="Room">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyID" Type="Int32" />
+          <Property Name="LevelID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="ThesisModel.FK_Rooms_Companies" FromRole="Room" ToRole="Company" />
+          <NavigationProperty Name="Level" Relationship="ThesisModel.FK_Rooms_Levels" FromRole="Room" ToRole="Level" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Companies" Relationship="ThesisModel.FK_Companies_States" FromRole="State" ToRole="Company" />
+          <NavigationProperty Name="DailyMenuHeads" Relationship="ThesisModel.FK_DailyMenuHead_States" FromRole="State" ToRole="DailyMenuHead" />
+          <NavigationProperty Name="Users" Relationship="ThesisModel.FK_Users_States" FromRole="State" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserFavorite">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="DishID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dish" Relationship="ThesisModel.FK_UserFavorites_Dishes" FromRole="UserFavorite" ToRole="Dish" />
+          <NavigationProperty Name="User" Relationship="ThesisModel.FK_UserFavorites_Users" FromRole="UserFavorite" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RolesForUsers" Relationship="ThesisModel.FK_RolesForUsers_UserRoles" FromRole="UserRole" ToRole="RolesForUser" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ActivationCode" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="7" />
+          <Property Name="ActivationDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CompaniesForUsers" Relationship="ThesisModel.FK_CompaniesForUsers_Users" FromRole="User" ToRole="CompaniesForUser" />
+          <NavigationProperty Name="State" Relationship="ThesisModel.FK_Users_States" FromRole="User" ToRole="State" />
+          <NavigationProperty Name="UserFavorites" Relationship="ThesisModel.FK_UserFavorites_Users" FromRole="User" ToRole="UserFavorite" />
+        </EntityType>
         <Association Name="FK_dbo_ApplicationUserClaims_dbo_ApplicationUsers_UserId">
           <End Type="ThesisModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1042,148 +814,210 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Companies_States">
+          <End Type="ThesisModel.State" Role="State" Multiplicity="1" />
+          <End Type="ThesisModel.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompaniesForUsers_Companies">
+          <End Type="ThesisModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="ThesisModel.CompaniesForUser" Role="CompaniesForUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CompaniesForUser">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rooms_Companies">
+          <End Type="ThesisModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="ThesisModel.Room" Role="Room" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CompaniesForUsers_Users">
+          <End Type="ThesisModel.User" Role="User" Multiplicity="1" />
+          <End Type="ThesisModel.CompaniesForUser" Role="CompaniesForUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CompaniesForUser">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DailyMenuDetail_DailyMenuHead">
+          <End Type="ThesisModel.DailyMenuHead" Role="DailyMenuHead" Multiplicity="1" />
+          <End Type="ThesisModel.DailyMenuDetail" Role="DailyMenuDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DailyMenuHead">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DailyMenuDetail">
+              <PropertyRef Name="MenuHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DailyMenuDetail_Dishes">
+          <End Type="ThesisModel.Dish" Role="Dish" Multiplicity="1" />
+          <End Type="ThesisModel.DailyMenuDetail" Role="DailyMenuDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DailyMenuDetail">
+              <PropertyRef Name="DishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DailyMenuHead_States">
+          <End Type="ThesisModel.State" Role="State" Multiplicity="1" />
+          <End Type="ThesisModel.DailyMenuHead" Role="DailyMenuHead" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DailyMenuHead">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Dishes_DishCategory">
+          <End Type="ThesisModel.DishCategory" Role="DishCategory" Multiplicity="1" />
+          <End Type="ThesisModel.Dish" Role="Dish" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DishCategory">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Dish">
+              <PropertyRef Name="DishCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavorites_Dishes">
+          <End Type="ThesisModel.Dish" Role="Dish" Multiplicity="1" />
+          <End Type="ThesisModel.UserFavorite" Role="UserFavorite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserFavorite">
+              <PropertyRef Name="DishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rooms_Levels">
+          <End Type="ThesisModel.Level" Role="Level" Multiplicity="1" />
+          <End Type="ThesisModel.Room" Role="Room" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Level">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room">
+              <PropertyRef Name="LevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolesForUsers_UserRoles">
+          <End Type="ThesisModel.UserRole" Role="UserRole" Multiplicity="1" />
+          <End Type="ThesisModel.RolesForUser" Role="RolesForUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRole">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RolesForUser">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_States">
+          <End Type="ThesisModel.State" Role="State" Multiplicity="1" />
+          <End Type="ThesisModel.User" Role="User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserFavorites_Users">
+          <End Type="ThesisModel.User" Role="User" Multiplicity="1" />
+          <End Type="ThesisModel.UserFavorite" Role="UserFavorite" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserFavorite">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="AspNetUserRoles">
           <End Type="ThesisModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="ThesisModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
-      </Schema>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="DishID" Type="Int32" Nullable="false" />
+          <Property Name="MenuHeadID" Type="Int32" Nullable="false" />
+          <Property Name="IsOrdered" Type="Boolean" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Amount" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DailyMenuHead" Relationship="ThesisModel.FK_Orders_DailyMenuHead" FromRole="Order" ToRole="DailyMenuHead" />
+          <NavigationProperty Name="Dish" Relationship="ThesisModel.FK_Orders_Dishes" FromRole="Order" ToRole="Dish" />
+        </EntityType>
+        <Association Name="FK_Orders_DailyMenuHead">
+          <End Type="ThesisModel.DailyMenuHead" Role="DailyMenuHead" Multiplicity="1" />
+          <End Type="ThesisModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DailyMenuHead">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="MenuHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Dishes">
+          <End Type="ThesisModel.Dish" Role="Dish" Multiplicity="1" />
+          <End Type="ThesisModel.Order" Role="Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dish">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="DishID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ThesisModelStoreContainer" CdmEntityContainer="Entities">
-          <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="ThesisModel.Company">
-              <MappingFragment StoreEntitySet="Companies">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CompaniesForUsers">
-            <EntityTypeMapping TypeName="ThesisModel.CompaniesForUser">
-              <MappingFragment StoreEntitySet="CompaniesForUsers">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DailyMenuDetails">
-            <EntityTypeMapping TypeName="ThesisModel.DailyMenuDetail">
-              <MappingFragment StoreEntitySet="DailyMenuDetail">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="DishID" ColumnName="DishID" />
-                <ScalarProperty Name="MenuHeadID" ColumnName="MenuHeadID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DailyMenuHeads">
-            <EntityTypeMapping TypeName="ThesisModel.DailyMenuHead">
-              <MappingFragment StoreEntitySet="DailyMenuHead">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="MenuDate" ColumnName="MenuDate" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DishCategories">
-            <EntityTypeMapping TypeName="ThesisModel.DishCategory">
-              <MappingFragment StoreEntitySet="DishCategory">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Dishes">
-            <EntityTypeMapping TypeName="ThesisModel.Dish">
-              <MappingFragment StoreEntitySet="Dishes">
-                <ScalarProperty Name="DishCategoryID" ColumnName="DishCategoryID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Levels">
-            <EntityTypeMapping TypeName="ThesisModel.Level">
-              <MappingFragment StoreEntitySet="Levels">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="ThesisModel.Order">
-              <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="IsOrdered" ColumnName="IsOrdered" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="DishID" ColumnName="DishID" />
-                <ScalarProperty Name="MenuHeadID" ColumnName="MenuHeadID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RolesForUsers">
-            <EntityTypeMapping TypeName="ThesisModel.RolesForUser">
-              <MappingFragment StoreEntitySet="RolesForUsers">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Rooms">
-            <EntityTypeMapping TypeName="ThesisModel.Room">
-              <MappingFragment StoreEntitySet="Rooms">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="States">
-            <EntityTypeMapping TypeName="ThesisModel.State">
-              <MappingFragment StoreEntitySet="States">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserFavorites">
-            <EntityTypeMapping TypeName="ThesisModel.UserFavorite">
-              <MappingFragment StoreEntitySet="UserFavorites">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="DishID" ColumnName="DishID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="UserRoles">
-            <EntityTypeMapping TypeName="ThesisModel.UserRole">
-              <MappingFragment StoreEntitySet="UserRoles">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="ThesisModel.User">
-              <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
-                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
-                <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="ThesisModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
@@ -1229,6 +1063,125 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="ThesisModel.Company">
+              <MappingFragment StoreEntitySet="Companies">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompaniesForUsers">
+            <EntityTypeMapping TypeName="ThesisModel.CompaniesForUser">
+              <MappingFragment StoreEntitySet="CompaniesForUsers">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DailyMenuDetails">
+            <EntityTypeMapping TypeName="ThesisModel.DailyMenuDetail">
+              <MappingFragment StoreEntitySet="DailyMenuDetail">
+                <ScalarProperty Name="MenuHeadID" ColumnName="MenuHeadID" />
+                <ScalarProperty Name="DishID" ColumnName="DishID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DailyMenuHeads">
+            <EntityTypeMapping TypeName="ThesisModel.DailyMenuHead">
+              <MappingFragment StoreEntitySet="DailyMenuHead">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="MenuDate" ColumnName="MenuDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DishCategories">
+            <EntityTypeMapping TypeName="ThesisModel.DishCategory">
+              <MappingFragment StoreEntitySet="DishCategory">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dishes">
+            <EntityTypeMapping TypeName="ThesisModel.Dish">
+              <MappingFragment StoreEntitySet="Dishes">
+                <ScalarProperty Name="DishCategoryID" ColumnName="DishCategoryID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Levels">
+            <EntityTypeMapping TypeName="ThesisModel.Level">
+              <MappingFragment StoreEntitySet="Levels">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RolesForUsers">
+            <EntityTypeMapping TypeName="ThesisModel.RolesForUser">
+              <MappingFragment StoreEntitySet="RolesForUsers">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rooms">
+            <EntityTypeMapping TypeName="ThesisModel.Room">
+              <MappingFragment StoreEntitySet="Rooms">
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="States">
+            <EntityTypeMapping TypeName="ThesisModel.State">
+              <MappingFragment StoreEntitySet="States">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserFavorites">
+            <EntityTypeMapping TypeName="ThesisModel.UserFavorite">
+              <MappingFragment StoreEntitySet="UserFavorites">
+                <ScalarProperty Name="DishID" ColumnName="DishID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="ThesisModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRoles">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ThesisModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <AssociationSetMapping Name="AspNetUserRoles" TypeName="ThesisModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
             <EndProperty Name="AspNetUser">
               <ScalarProperty Name="Id" ColumnName="UserId" />
@@ -1237,6 +1190,19 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="ThesisModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="IsOrdered" ColumnName="IsOrdered" />
+                <ScalarProperty Name="MenuHeadID" ColumnName="MenuHeadID" />
+                <ScalarProperty Name="DishID" ColumnName="DishID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

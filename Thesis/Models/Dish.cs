@@ -18,8 +18,8 @@ namespace Thesis.Models
         public Dish()
         {
             this.DailyMenuDetails = new HashSet<DailyMenuDetail>();
-            this.Orders = new HashSet<Order>();
             this.UserFavorites = new HashSet<UserFavorite>();
+            this.Orders = new HashSet<Order>();
         }
     
         public int ID { get; set; }
@@ -29,10 +29,10 @@ namespace Thesis.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DailyMenuDetail> DailyMenuDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual DishCategory DishCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserFavorite> UserFavorites { get; set; }
-        public virtual DishCategory DishCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

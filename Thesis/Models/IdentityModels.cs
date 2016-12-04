@@ -16,6 +16,8 @@ namespace Thesis.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -31,6 +33,6 @@ namespace Thesis.Models
         }
 
         public System.Data.Entity.DbSet<Thesis.Models.State> States { get; set; }
-        
+
     }
 }
