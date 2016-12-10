@@ -22,11 +22,18 @@
             </div>
             <div class="navbar-collapse collapse main-menu">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Ételek", "Index", "Dishes")</li>
-                    <li>@Html.ActionLink("Cégek", "Index", "Companies")</li>
+                    @if(Thesis.Models.AuthenticationTools.UserHasRole(Html.ViewContext.HttpContext.User.Identity.Name, "Boss,Admin,StaffMember"))
+                    {
+                        <li>@Html.ActionLink("Ételek", "Index", "Dishes")</li>
+                    }
+                    @if (Thesis.Models.AuthenticationTools.UserHasRole(Html.ViewContext.HttpContext.User.Identity.Name, "Boss,Admin"))
+                    {
+                        <li>@Html.ActionLink("Cégek", "Index", "Companies")</li>
+                    }
                     <li>@Html.ActionLink("Szobák", "Index", "Rooms")</li>
                     <li>@Html.ActionLink("Napi menü összeállítása", "Index", "DailyMenuDetails")</li>
                     <li>@Html.ActionLink("Rendelés", "Index", "Orders")</li>
+                    <li>@Html.ActionLink("Rendelések", "Index", "AspNetRoles")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

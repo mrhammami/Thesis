@@ -1,21 +1,18 @@
 ﻿@model IEnumerable<Thesis.Models.Company>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cégek";
 }
 
-<h2>Index</h2>
+<h2>Cégek listája</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Új cég hozzáadása", "Create")
 </p>
 <table class="table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.State.Name)
         </th>
         <th></th>
     </tr>
@@ -26,12 +23,9 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.State.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Módosítás", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Részletek", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Törlés", "Delete", new { id=item.ID })
         </td>
     </tr>
 }

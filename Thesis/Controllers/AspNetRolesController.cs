@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -10,116 +12,112 @@ using Thesis.Models;
 
 namespace Thesis.Controllers
 {
-    public class RoomsController : Controller
+    public class AspNetRolesController : Controller
     {
         private Entities db = new Entities();
 
-        // GET: Rooms
+        // GET: AspNetRoles
         public ActionResult Index()
         {
-            var rooms = db.Rooms.Include(r => r.Company).Include(r => r.Level).OrderBy(x => x.Name);
-            return View(rooms.ToList());
+            return View(db.AspNetRoles.ToList());
         }
 
-        // GET: Rooms/Details/5
-        public ActionResult Details(int? id)
+        // GET: AspNetRoles/Details/5
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
+            AspNetRole aspNetRole = db.AspNetRoles.Find(id);
+            if (aspNetRole == null)
             {
                 return HttpNotFound();
             }
-            return View(room);
+            return View(aspNetRole);
         }
 
-        // GET: Rooms/Create
+        // GET: AspNetRoles/Create
         public ActionResult Create()
         {
-            ViewBag.CompanyID = new SelectList(db.Companies, "ID", "Name");
-            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name");
             return View();
         }
 
-        // POST: Rooms/Create
+        // POST: AspNetRoles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,CompanyID,LevelID")] Room room)
+        public ActionResult Create([Bind(Include = "Name")] AspNetRole aspNetRole)
         {
             if (ModelState.IsValid)
             {
-                db.Rooms.Add(room);
+                AspNetRole anr = new AspNetRole();
+                Guid g = Guid.NewGuid();
+                anr.Id = g.ToString();
+                anr.Name = aspNetRole.Name;
+                db.AspNetRoles.Add(anr);
+                db.Entry(anr).State = EntityState.Added;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CompanyID = new SelectList(db.Companies, "ID", "Name", room.CompanyID);
-            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name", room.LevelID);
-            return View(room);
+            return View(aspNetRole);
         }
 
-        // GET: Rooms/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: AspNetRoles/Edit/5
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
+            AspNetRole aspNetRole = db.AspNetRoles.Find(id);
+            if (aspNetRole == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CompanyID = new SelectList(db.Companies, "ID", "Name", room.CompanyID);
-            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name", room.LevelID);
-            return View(room);
+            return View(aspNetRole);
         }
 
-        // POST: Rooms/Edit/5
+        // POST: AspNetRoles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,CompanyID,LevelID")] Room room)
+        public ActionResult Edit([Bind(Include = "Id,Name")] AspNetRole aspNetRole)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(room).State = EntityState.Modified;
+                db.Entry(aspNetRole).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CompanyID = new SelectList(db.Companies, "ID", "Name", room.CompanyID);
-            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name", room.LevelID);
-            return View(room);
+            return View(aspNetRole);
         }
 
-        // GET: Rooms/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: AspNetRoles/Delete/5
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Room room = db.Rooms.Find(id);
-            if (room == null)
+            AspNetRole aspNetRole = db.AspNetRoles.Find(id);
+            if (aspNetRole == null)
             {
                 return HttpNotFound();
             }
-            return View(room);
+            return View(aspNetRole);
         }
 
-        // POST: Rooms/Delete/5
+        // POST: AspNetRoles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
-            Room room = db.Rooms.Find(id);
-            db.Rooms.Remove(room);
+            AspNetRole aspNetRole = db.AspNetRoles.Find(id);
+            db.AspNetRoles.Remove(aspNetRole);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -1,13 +1,12 @@
 ﻿@model Thesis.Models.Company
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Részletek";
 }
 
-<h2>Details</h2>
+<h2>Részletek</h2>
 
 <div>
-    <h4>Company</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -17,18 +16,9 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.State.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.State.Name)
-        </dd>
-
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Módosítás", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Vissza a listához", "Index")
 </p>

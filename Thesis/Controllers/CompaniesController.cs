@@ -14,9 +14,14 @@ namespace Thesis.Controllers
     {
         private Entities db = new Entities();
 
+        public string currentUser { get { return HttpContext.User.Identity.Name; } }
+
         // GET: Companies
         public ActionResult Index()
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             var companies = db.Companies.Include(c => c.State);
             return View(companies.ToList());
         }
@@ -24,6 +29,9 @@ namespace Thesis.Controllers
         // GET: Companies/Details/5
         public ActionResult Details(int? id)
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,6 +47,9 @@ namespace Thesis.Controllers
         // GET: Companies/Create
         public ActionResult Create()
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             ViewBag.StatusID = new SelectList(db.States, "ID", "Name");
             return View();
         }
@@ -48,10 +59,14 @@ namespace Thesis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,StatusID")] Company company)
+        public ActionResult Create([Bind(Include = "Name,StatusID")] Company company)
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             if (ModelState.IsValid)
             {
+                company.StatusID = 1;
                 db.Companies.Add(company);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -64,6 +79,9 @@ namespace Thesis.Controllers
         // GET: Companies/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -82,11 +100,16 @@ namespace Thesis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,StatusID")] Company company)
+        public ActionResult Edit([Bind(Include = "Name")] Company company)
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             if (ModelState.IsValid)
             {
-                db.Entry(company).State = EntityState.Modified;
+                Company nc = db.Companies.Where(x => x.ID == company.ID).FirstOrDefault();
+                nc.Name = company.Name;
+                db.Entry(nc).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -97,6 +120,9 @@ namespace Thesis.Controllers
         // GET: Companies/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -114,6 +140,9 @@ namespace Thesis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
+                return RedirectToAction("Login", "Account");
+
             Company company = db.Companies.Find(id);
             db.Companies.Remove(company);
             db.SaveChanges();

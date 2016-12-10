@@ -198,6 +198,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AspNetRolesController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
     <Compile Include="Controllers\DailyMenuDetailsController.cs" />
     <Compile Include="Controllers\DishCategoriesController.cs" />
@@ -224,12 +225,14 @@
     <Compile Include="Models\AspNetUserLogin.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AuthenticationTools.cs" />
     <Compile Include="Models\CompaniesForUser.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Company.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CompanyViewModel.cs" />
     <Compile Include="Models\DailyMenuDetail.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
@@ -249,6 +252,7 @@
     <Compile Include="Models\Level.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LevelViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Order.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
@@ -261,6 +265,7 @@
     <Compile Include="Models\Room.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RoomViewModel.cs" />
     <Compile Include="Models\State.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
@@ -408,6 +413,11 @@
     <Content Include="Views\Orders\Details.cshtml" />
     <Content Include="Views\Orders\Edit.cshtml" />
     <Content Include="Views\Orders\Index.cshtml" />
+    <Content Include="Views\AspNetRoles\Create.cshtml" />
+    <Content Include="Views\AspNetRoles\Delete.cshtml" />
+    <Content Include="Views\AspNetRoles\Details.cshtml" />
+    <Content Include="Views\AspNetRoles\Edit.cshtml" />
+    <Content Include="Views\AspNetRoles\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
