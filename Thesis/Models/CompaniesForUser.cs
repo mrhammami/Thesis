@@ -15,10 +15,9 @@ namespace Thesis.Models
     public partial class CompaniesForUser
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public int CompanyID { get; set; }
     
         public virtual Company Company { get; set; }
-        public virtual User User { get; set; }
     }
 }

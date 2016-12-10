@@ -109,10 +109,19 @@ namespace Thesis.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Level level = db.Levels.Find(id);
-            db.Levels.Remove(level);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Level level = db.Levels.Find(id);
+                db.Levels.Remove(level);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Name", "A tétel jelenleg nem törölhető.");
+                Level level = db.Levels.Find(id);
+                return View(level);
+            }
         }
 
         protected override void Dispose(bool disposing)

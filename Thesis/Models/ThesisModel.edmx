@@ -69,7 +69,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="CompanyID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="DailyMenuDetail">
@@ -195,18 +195,6 @@
             </Principal>
             <Dependent Role="CompaniesForUsers">
               <PropertyRef Name="CompanyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CompaniesForUsers_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
-          <End Role="CompaniesForUsers" Type="Self.CompaniesForUsers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Users">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CompaniesForUsers">
-              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -438,10 +426,6 @@
             <End Role="Companies" EntitySet="Companies" />
             <End Role="CompaniesForUsers" EntitySet="CompaniesForUsers" />
           </AssociationSet>
-          <AssociationSet Name="FK_CompaniesForUsers_Users" Association="Self.FK_CompaniesForUsers_Users">
-            <End Role="Users" EntitySet="Users" />
-            <End Role="CompaniesForUsers" EntitySet="CompaniesForUsers" />
-          </AssociationSet>
           <AssociationSet Name="FK_DailyMenuDetail_DailyMenuHead" Association="Self.FK_DailyMenuDetail_DailyMenuHead">
             <End Role="DailyMenuHead" EntitySet="DailyMenuHead" />
             <End Role="DailyMenuDetail" EntitySet="DailyMenuDetail" />
@@ -517,7 +501,6 @@
           <EntitySet Name="AspNetUserLogins" EntityType="ThesisModel.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="ThesisModel.AspNetUser" />
           <EntitySet Name="Companies" EntityType="ThesisModel.Company" />
-          <EntitySet Name="CompaniesForUsers" EntityType="ThesisModel.CompaniesForUser" />
           <EntitySet Name="DailyMenuDetails" EntityType="ThesisModel.DailyMenuDetail" />
           <EntitySet Name="DailyMenuHeads" EntityType="ThesisModel.DailyMenuHead" />
           <EntitySet Name="DishCategories" EntityType="ThesisModel.DishCategory" />
@@ -541,17 +524,9 @@
             <End Role="State" EntitySet="States" />
             <End Role="Company" EntitySet="Companies" />
           </AssociationSet>
-          <AssociationSet Name="FK_CompaniesForUsers_Companies" Association="ThesisModel.FK_CompaniesForUsers_Companies">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="CompaniesForUser" EntitySet="CompaniesForUsers" />
-          </AssociationSet>
           <AssociationSet Name="FK_Rooms_Companies" Association="ThesisModel.FK_Rooms_Companies">
             <End Role="Company" EntitySet="Companies" />
             <End Role="Room" EntitySet="Rooms" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CompaniesForUsers_Users" Association="ThesisModel.FK_CompaniesForUsers_Users">
-            <End Role="User" EntitySet="Users" />
-            <End Role="CompaniesForUser" EntitySet="CompaniesForUsers" />
           </AssociationSet>
           <AssociationSet Name="FK_DailyMenuDetail_DailyMenuHead" Association="ThesisModel.FK_DailyMenuDetail_DailyMenuHead">
             <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
@@ -601,6 +576,11 @@
           <AssociationSet Name="FK_Orders_Dishes" Association="ThesisModel.FK_Orders_Dishes">
             <End Role="Dish" EntitySet="Dishes" />
             <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <EntitySet Name="CompaniesForUsers" EntityType="ThesisModel.CompaniesForUser" />
+          <AssociationSet Name="FK_CompaniesForUsers_Companies" Association="ThesisModel.FK_CompaniesForUsers_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="CompaniesForUser" EntitySet="CompaniesForUsers" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AspNetRole">
@@ -660,18 +640,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="StatusID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="State" Relationship="ThesisModel.FK_Companies_States" FromRole="Company" ToRole="State" />
-          <NavigationProperty Name="CompaniesForUsers" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="Company" ToRole="CompaniesForUser" />
           <NavigationProperty Name="Rooms" Relationship="ThesisModel.FK_Rooms_Companies" FromRole="Company" ToRole="Room" />
-        </EntityType>
-        <EntityType Name="CompaniesForUser">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
-          <Property Name="CompanyID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Company" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="CompaniesForUser" ToRole="Company" />
-          <NavigationProperty Name="User" Relationship="ThesisModel.FK_CompaniesForUsers_Users" FromRole="CompaniesForUser" ToRole="User" />
+          <NavigationProperty Name="CompaniesForUsers" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="Company" ToRole="CompaniesForUser" />
         </EntityType>
         <EntityType Name="DailyMenuDetail">
           <Key>
@@ -782,7 +752,6 @@
           <Property Name="RegistrationDate" Type="DateTime" Precision="7" />
           <Property Name="ActivationDate" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="StatusID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CompaniesForUsers" Relationship="ThesisModel.FK_CompaniesForUsers_Users" FromRole="User" ToRole="CompaniesForUser" />
           <NavigationProperty Name="State" Relationship="ThesisModel.FK_Users_States" FromRole="User" ToRole="State" />
           <NavigationProperty Name="UserFavorites" Relationship="ThesisModel.FK_UserFavorites_Users" FromRole="User" ToRole="UserFavorite" />
         </EntityType>
@@ -826,18 +795,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CompaniesForUsers_Companies">
-          <End Type="ThesisModel.Company" Role="Company" Multiplicity="1" />
-          <End Type="ThesisModel.CompaniesForUser" Role="CompaniesForUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CompaniesForUser">
-              <PropertyRef Name="CompanyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Rooms_Companies">
           <End Type="ThesisModel.Company" Role="Company" Multiplicity="0..1" />
           <End Type="ThesisModel.Room" Role="Room" Multiplicity="*" />
@@ -847,18 +804,6 @@
             </Principal>
             <Dependent Role="Room">
               <PropertyRef Name="CompanyID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CompaniesForUsers_Users">
-          <End Type="ThesisModel.User" Role="User" Multiplicity="1" />
-          <End Type="ThesisModel.CompaniesForUser" Role="CompaniesForUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="CompaniesForUser">
-              <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1012,6 +957,27 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CompaniesForUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="CompaniesForUser" ToRole="Company" />
+        </EntityType>
+        <Association Name="FK_CompaniesForUsers_Companies">
+          <End Type="ThesisModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="ThesisModel.CompaniesForUser" Role="CompaniesForUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CompaniesForUser">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1068,15 +1034,6 @@
               <MappingFragment StoreEntitySet="Companies">
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CompaniesForUsers">
-            <EntityTypeMapping TypeName="ThesisModel.CompaniesForUser">
-              <MappingFragment StoreEntitySet="CompaniesForUsers">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1198,6 +1155,15 @@
                 <ScalarProperty Name="IsOrdered" ColumnName="IsOrdered" />
                 <ScalarProperty Name="MenuHeadID" ColumnName="MenuHeadID" />
                 <ScalarProperty Name="DishID" ColumnName="DishID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CompaniesForUsers">
+            <EntityTypeMapping TypeName="ThesisModel.CompaniesForUser">
+              <MappingFragment StoreEntitySet="CompaniesForUsers">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

@@ -30,7 +30,6 @@ namespace Thesis.Models
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
-        public virtual DbSet<CompaniesForUser> CompaniesForUsers { get; set; }
         public virtual DbSet<DailyMenuDetail> DailyMenuDetails { get; set; }
         public virtual DbSet<DailyMenuHead> DailyMenuHeads { get; set; }
         public virtual DbSet<DishCategory> DishCategories { get; set; }
@@ -43,5 +42,6 @@ namespace Thesis.Models
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<CompaniesForUser> CompaniesForUsers { get; set; }
     }
 }

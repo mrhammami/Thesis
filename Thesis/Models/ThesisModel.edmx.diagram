@@ -10,7 +10,6 @@
         <EntityTypeShape EntityType="ThesisModel.AspNetUserLogin" Width="1.5" PointX="8.25" PointY="12" />
         <EntityTypeShape EntityType="ThesisModel.AspNetUser" Width="1.5" PointX="6" PointY="12.125" />
         <EntityTypeShape EntityType="ThesisModel.Company" Width="1.5" PointX="3" PointY="15.875" />
-        <EntityTypeShape EntityType="ThesisModel.CompaniesForUser" Width="1.5" PointX="5.25" PointY="8.375" />
         <EntityTypeShape EntityType="ThesisModel.DailyMenuDetail" Width="1.5" PointX="5.25" PointY="5.25" />
         <EntityTypeShape EntityType="ThesisModel.DailyMenuHead" Width="1.5" PointX="3" PointY="9.125" />
         <EntityTypeShape EntityType="ThesisModel.DishCategory" Width="1.5" PointX="0.75" PointY="5.375" />
@@ -25,9 +24,7 @@
         <AssociationConnector Association="ThesisModel.FK_dbo_ApplicationUserClaims_dbo_ApplicationUsers_UserId" />
         <AssociationConnector Association="ThesisModel.FK_dbo_ApplicationUserLogins_dbo_ApplicationUsers_UserId" />
         <AssociationConnector Association="ThesisModel.FK_Companies_States" />
-        <AssociationConnector Association="ThesisModel.FK_CompaniesForUsers_Companies" />
         <AssociationConnector Association="ThesisModel.FK_Rooms_Companies" />
-        <AssociationConnector Association="ThesisModel.FK_CompaniesForUsers_Users" />
         <AssociationConnector Association="ThesisModel.FK_DailyMenuDetail_DailyMenuHead" />
         <AssociationConnector Association="ThesisModel.FK_DailyMenuDetail_Dishes" />
         <AssociationConnector Association="ThesisModel.FK_DailyMenuHead_States" />
@@ -41,6 +38,8 @@
         <EntityTypeShape EntityType="ThesisModel.Order" Width="1.5" PointX="8.25" PointY="6.75" />
         <AssociationConnector Association="ThesisModel.FK_Orders_DailyMenuHead" />
         <AssociationConnector Association="ThesisModel.FK_Orders_Dishes" />
+        <EntityTypeShape EntityType="ThesisModel.CompaniesForUser" Width="1.5" PointX="5.25" PointY="21.125" />
+        <AssociationConnector Association="ThesisModel.FK_CompaniesForUsers_Companies" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

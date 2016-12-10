@@ -200,6 +200,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AspNetRolesController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
+    <Compile Include="Controllers\CompaniesForUsersController.cs" />
     <Compile Include="Controllers\DailyMenuDetailsController.cs" />
     <Compile Include="Controllers\DishCategoriesController.cs" />
     <Compile Include="Controllers\DishesController.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Models\AspNetUserLogin.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AspNetUserViewModel.cs" />
     <Compile Include="Models\AuthenticationTools.cs" />
     <Compile Include="Models\CompaniesForUser.cs">
       <DependentUpon>ThesisModel.tt</DependentUpon>
@@ -418,6 +420,11 @@
     <Content Include="Views\AspNetRoles\Details.cshtml" />
     <Content Include="Views\AspNetRoles\Edit.cshtml" />
     <Content Include="Views\AspNetRoles\Index.cshtml" />
+    <Content Include="Views\CompaniesForUsers\Create.cshtml" />
+    <Content Include="Views\CompaniesForUsers\Delete.cshtml" />
+    <Content Include="Views\CompaniesForUsers\Details.cshtml" />
+    <Content Include="Views\CompaniesForUsers\Edit.cshtml" />
+    <Content Include="Views\CompaniesForUsers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

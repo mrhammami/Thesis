@@ -17,7 +17,6 @@ namespace Thesis.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.CompaniesForUsers = new HashSet<CompaniesForUser>();
             this.UserFavorites = new HashSet<UserFavorite>();
         }
     
@@ -29,8 +28,6 @@ namespace Thesis.Models
         public System.DateTime ActivationDate { get; set; }
         public int StatusID { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CompaniesForUser> CompaniesForUsers { get; set; }
         public virtual State State { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserFavorite> UserFavorites { get; set; }
