@@ -13,11 +13,17 @@ namespace Thesis.Models
 
         [Display(Name="Cég")]
         public int? CompanyID { get; set; }
+
+        [Display(Name="Szoba")]
+        public int? RoomID { get; set; }
+
     }
 
     [MetadataType(typeof(AspNetUserViewModel))]
     public partial class AspNetUser
     {
         public int? CompanyID { get; set; }
+
+        public int? RoomID { get; set; }
     }
 }

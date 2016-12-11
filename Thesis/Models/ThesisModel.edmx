@@ -63,6 +63,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="LevelID" Type="int" />
         </EntityType>
         <EntityType Name="CompaniesForUsers">
           <Key>
@@ -174,6 +175,18 @@
           <Property Name="ActivationDate" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="StatusID" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Companies_Levels">
+          <End Role="Levels" Type="Self.Levels" Multiplicity="0..1" />
+          <End Role="Companies" Type="Self.Companies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Levels">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Companies">
+              <PropertyRef Name="LevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Companies_States">
           <End Role="States" Type="Self.States" Multiplicity="1" />
           <End Role="Companies" Type="Self.Companies" Multiplicity="*" />
@@ -418,6 +431,10 @@
           <EntitySet Name="UserFavorites" EntityType="Self.UserFavorites" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Companies_Levels" Association="Self.FK_Companies_Levels">
+            <End Role="Levels" EntitySet="Levels" />
+            <End Role="Companies" EntitySet="Companies" />
+          </AssociationSet>
           <AssociationSet Name="FK_Companies_States" Association="Self.FK_Companies_States">
             <End Role="States" EntitySet="States" />
             <End Role="Companies" EntitySet="Companies" />
@@ -500,7 +517,6 @@
           <EntitySet Name="AspNetUserClaims" EntityType="ThesisModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="ThesisModel.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="ThesisModel.AspNetUser" />
-          <EntitySet Name="Companies" EntityType="ThesisModel.Company" />
           <EntitySet Name="DailyMenuDetails" EntityType="ThesisModel.DailyMenuDetail" />
           <EntitySet Name="DailyMenuHeads" EntityType="ThesisModel.DailyMenuHead" />
           <EntitySet Name="DishCategories" EntityType="ThesisModel.DishCategory" />
@@ -519,14 +535,6 @@
           <AssociationSet Name="FK_dbo_ApplicationUserLogins_dbo_ApplicationUsers_UserId" Association="ThesisModel.FK_dbo_ApplicationUserLogins_dbo_ApplicationUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Companies_States" Association="ThesisModel.FK_Companies_States">
-            <End Role="State" EntitySet="States" />
-            <End Role="Company" EntitySet="Companies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rooms_Companies" Association="ThesisModel.FK_Rooms_Companies">
-            <End Role="Company" EntitySet="Companies" />
-            <End Role="Room" EntitySet="Rooms" />
           </AssociationSet>
           <AssociationSet Name="FK_DailyMenuDetail_DailyMenuHead" Association="ThesisModel.FK_DailyMenuDetail_DailyMenuHead">
             <End Role="DailyMenuHead" EntitySet="DailyMenuHeads" />
@@ -578,9 +586,22 @@
             <End Role="Order" EntitySet="Orders" />
           </AssociationSet>
           <EntitySet Name="CompaniesForUsers" EntityType="ThesisModel.CompaniesForUser" />
+          <EntitySet Name="Companies" EntityType="ThesisModel.Company" />
+          <AssociationSet Name="FK_Companies_Levels" Association="ThesisModel.FK_Companies_Levels">
+            <End Role="Level" EntitySet="Levels" />
+            <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Companies_States" Association="ThesisModel.FK_Companies_States">
+            <End Role="State" EntitySet="States" />
+            <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
           <AssociationSet Name="FK_CompaniesForUsers_Companies" Association="ThesisModel.FK_CompaniesForUsers_Companies">
             <End Role="Company" EntitySet="Companies" />
             <End Role="CompaniesForUser" EntitySet="CompaniesForUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rooms_Companies" Association="ThesisModel.FK_Rooms_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Room" EntitySet="Rooms" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="AspNetRole">
@@ -632,17 +653,6 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="ThesisModel.FK_dbo_ApplicationUserLogins_dbo_ApplicationUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
           <NavigationProperty Name="AspNetRoles" Relationship="ThesisModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
         </EntityType>
-        <EntityType Name="Company">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="StatusID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="State" Relationship="ThesisModel.FK_Companies_States" FromRole="Company" ToRole="State" />
-          <NavigationProperty Name="Rooms" Relationship="ThesisModel.FK_Rooms_Companies" FromRole="Company" ToRole="Room" />
-          <NavigationProperty Name="CompaniesForUsers" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="Company" ToRole="CompaniesForUser" />
-        </EntityType>
         <EntityType Name="DailyMenuDetail">
           <Key>
             <PropertyRef Name="ID" />
@@ -692,6 +702,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Rooms" Relationship="ThesisModel.FK_Rooms_Levels" FromRole="Level" ToRole="Room" />
+          <NavigationProperty Name="Companies" Relationship="ThesisModel.FK_Companies_Levels" FromRole="Level" ToRole="Company" />
         </EntityType>
         <EntityType Name="RolesForUser">
           <Key>
@@ -710,8 +721,8 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="CompanyID" Type="Int32" />
           <Property Name="LevelID" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Company" Relationship="ThesisModel.FK_Rooms_Companies" FromRole="Room" ToRole="Company" />
           <NavigationProperty Name="Level" Relationship="ThesisModel.FK_Rooms_Levels" FromRole="Room" ToRole="Level" />
+          <NavigationProperty Name="Company" Relationship="ThesisModel.FK_Rooms_Companies" FromRole="Room" ToRole="Company" />
         </EntityType>
         <EntityType Name="State">
           <Key>
@@ -719,9 +730,9 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Companies" Relationship="ThesisModel.FK_Companies_States" FromRole="State" ToRole="Company" />
           <NavigationProperty Name="DailyMenuHeads" Relationship="ThesisModel.FK_DailyMenuHead_States" FromRole="State" ToRole="DailyMenuHead" />
           <NavigationProperty Name="Users" Relationship="ThesisModel.FK_Users_States" FromRole="State" ToRole="User" />
+          <NavigationProperty Name="Companies" Relationship="ThesisModel.FK_Companies_States" FromRole="State" ToRole="Company" />
         </EntityType>
         <EntityType Name="UserFavorite">
           <Key>
@@ -780,30 +791,6 @@
             </Principal>
             <Dependent Role="AspNetUserLogin">
               <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Companies_States">
-          <End Type="ThesisModel.State" Role="State" Multiplicity="1" />
-          <End Type="ThesisModel.Company" Role="Company" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="State">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Company">
-              <PropertyRef Name="StatusID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Rooms_Companies">
-          <End Type="ThesisModel.Company" Role="Company" Multiplicity="0..1" />
-          <End Type="ThesisModel.Room" Role="Room" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Company">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Room">
-              <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -966,6 +953,43 @@
           <Property Name="CompanyID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Company" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="CompaniesForUser" ToRole="Company" />
         </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="LevelID" Type="Int32" />
+          <NavigationProperty Name="Level" Relationship="ThesisModel.FK_Companies_Levels" FromRole="Company" ToRole="Level" />
+          <NavigationProperty Name="State" Relationship="ThesisModel.FK_Companies_States" FromRole="Company" ToRole="State" />
+          <NavigationProperty Name="CompaniesForUsers" Relationship="ThesisModel.FK_CompaniesForUsers_Companies" FromRole="Company" ToRole="CompaniesForUser" />
+          <NavigationProperty Name="Rooms" Relationship="ThesisModel.FK_Rooms_Companies" FromRole="Company" ToRole="Room" />
+        </EntityType>
+        <Association Name="FK_Companies_Levels">
+          <End Type="ThesisModel.Level" Role="Level" Multiplicity="0..1" />
+          <End Type="ThesisModel.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Level">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="LevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Companies_States">
+          <End Type="ThesisModel.State" Role="State" Multiplicity="1" />
+          <End Type="ThesisModel.Company" Role="Company" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Company">
+              <PropertyRef Name="StatusID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CompaniesForUsers_Companies">
           <End Type="ThesisModel.Company" Role="Company" Multiplicity="1" />
           <End Type="ThesisModel.CompaniesForUser" Role="CompaniesForUser" Multiplicity="*" />
@@ -974,6 +998,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="CompaniesForUser">
+              <PropertyRef Name="CompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rooms_Companies">
+          <End Type="ThesisModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="ThesisModel.Room" Role="Room" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room">
               <PropertyRef Name="CompanyID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1026,15 +1062,6 @@
                 <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Companies">
-            <EntityTypeMapping TypeName="ThesisModel.Company">
-              <MappingFragment StoreEntitySet="Companies">
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1165,6 +1192,16 @@
               <MappingFragment StoreEntitySet="CompaniesForUsers">
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="ThesisModel.Company">
+              <MappingFragment StoreEntitySet="Companies">
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

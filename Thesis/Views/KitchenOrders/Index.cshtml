@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Thesis.Models.Order>
+
+@{
+    ViewBag.Title = "Rendelés összesítő";
+}
+
+<h2>Rendelés összesítő</h2>
+
+<div class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button id="dishCategoryNavbarButton" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".menu2">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Összes szint", "Index", "KitchenOrders", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse menu2">
+            <ul class="nav navbar-nav">
+                @foreach (var l in ViewBag.Levels)
+                {
+                    <li>@Html.ActionLink((l as Thesis.Models.Level).Name, "Index", new { levelID = (l as Thesis.Models.Level).ID, companyID = ViewBag.companyID ?? null })</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button id="dishCategoryNavbarButton" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".menu2">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Összes cég", "Index", "KitchenOrders", new { area = "" }, new { @class = "navbar-brand" })
+        </div>
+        <div class="navbar-collapse collapse menu2">
+            <ul class="nav navbar-nav">
+                @foreach (var c in ViewBag.Companies)
+                {
+                    <li>@Html.ActionLink((c as Thesis.Models.Company).Name, "Index", new { levelID = ViewBag.levelID ?? null, companyID = (c as Thesis.Models.Company).ID })</li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DishCategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LevelName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Dish.Name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DishCategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LevelName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DishName)
+        </td>
+    </tr>
+}
+
+</table>

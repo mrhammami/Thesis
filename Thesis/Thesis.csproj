@@ -205,6 +205,7 @@
     <Compile Include="Controllers\DishCategoriesController.cs" />
     <Compile Include="Controllers\DishesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KitchenOrdersController.cs" />
     <Compile Include="Controllers\LevelsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
@@ -425,6 +426,11 @@
     <Content Include="Views\CompaniesForUsers\Details.cshtml" />
     <Content Include="Views\CompaniesForUsers\Edit.cshtml" />
     <Content Include="Views\CompaniesForUsers\Index.cshtml" />
+    <Content Include="Views\KitchenOrders\Create.cshtml" />
+    <Content Include="Views\KitchenOrders\Delete.cshtml" />
+    <Content Include="Views\KitchenOrders\Details.cshtml" />
+    <Content Include="Views\KitchenOrders\Edit.cshtml" />
+    <Content Include="Views\KitchenOrders\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

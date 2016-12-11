@@ -33,7 +33,7 @@ namespace Thesis.Controllers
             {
                 return HttpNotFound();
             }
-            user.CompanyID = db.CompaniesForUsers.Where(u => u.UserID == id).Select(u => u.ID).FirstOrDefault();
+            user.CompanyID = db.CompaniesForUsers.Where(u => u.UserID == id).Select(u => u.CompanyID).FirstOrDefault();
             return View(user);
         }
 
@@ -45,7 +45,7 @@ namespace Thesis.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AspNetUser anu = db.AspNetUsers.Where(c => c.Id == id).FirstOrDefault();
-            anu.CompanyID = db.CompaniesForUsers.Where(c => c.UserID == id).Select(c => c.ID).FirstOrDefault();
+            anu.CompanyID = db.CompaniesForUsers.Where(c => c.UserID == id).Select(c => c.CompanyID).FirstOrDefault();
             if (anu == null)
             {
                 return HttpNotFound();

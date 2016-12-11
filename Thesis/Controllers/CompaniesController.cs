@@ -22,7 +22,7 @@ namespace Thesis.Controllers
             if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
                 return RedirectToAction("Login", "Account");
 
-            var companies = db.Companies.Include(c => c.State);
+            var companies = db.Companies.Include(c => c.State).Include(c => c.Level);
             return View(companies.ToList());
         }
 
@@ -51,6 +51,7 @@ namespace Thesis.Controllers
                 return RedirectToAction("Login", "Account");
 
             ViewBag.StatusID = new SelectList(db.States, "ID", "Name");
+            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name");
             return View();
         }
 
@@ -59,7 +60,7 @@ namespace Thesis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Name,StatusID")] Company company)
+        public ActionResult Create([Bind(Include = "Name,StatusID,LevelID")] Company company)
         {
             if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
                 return RedirectToAction("Login", "Account");
@@ -73,6 +74,8 @@ namespace Thesis.Controllers
             }
 
             ViewBag.StatusID = new SelectList(db.States, "ID", "Name", company.StatusID);
+            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name", company.LevelID);
+
             return View(company);
         }
 
@@ -92,6 +95,8 @@ namespace Thesis.Controllers
                 return HttpNotFound();
             }
             ViewBag.StatusID = new SelectList(db.States, "ID", "Name", company.StatusID);
+            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name", company.LevelID);
+
             return View(company);
         }
 
@@ -100,7 +105,7 @@ namespace Thesis.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name")] Company company)
+        public ActionResult Edit(Company company)
         {
             if (!AuthenticationTools.UserHasRole(currentUser, "Boss,Admin"))
                 return RedirectToAction("Login", "Account");
@@ -109,11 +114,14 @@ namespace Thesis.Controllers
             {
                 Company nc = db.Companies.Where(x => x.ID == company.ID).FirstOrDefault();
                 nc.Name = company.Name;
+                nc.LevelID = company.LevelID;
                 db.Entry(nc).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.StatusID = new SelectList(db.States, "ID", "Name", company.StatusID);
+            ViewBag.LevelID = new SelectList(db.Levels, "ID", "Name", company.LevelID);
+
             return View(company);
         }
 

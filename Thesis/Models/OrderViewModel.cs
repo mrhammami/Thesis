@@ -11,7 +11,25 @@ namespace Thesis.Models
     public partial class Order
     {
         [ForeignKey("UserID")]
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+
+        [Display(Name="Cég")]
+        public string CompanyName { get; set; }
+        public int CompanyID { get; set; }
+
+        [Display(Name="Szint")]
+        public string LevelName { get; set; }
+        public int LevelID { get; set; }
+        
+        [Display(Name="Étel")]
+        public string DishName { get; set; }
+
+        [Display(Name = "Kategória")]
+        public string DishCategoryName { get; set; }
+
+        public int DishCategoryID { get; set; }
+
+
     }
 
     public class OrderViewModel

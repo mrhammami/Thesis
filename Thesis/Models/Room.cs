@@ -19,7 +19,7 @@ namespace Thesis.Models
         public Nullable<int> CompanyID { get; set; }
         public int LevelID { get; set; }
     
-        public virtual Company Company { get; set; }
         public virtual Level Level { get; set; }
+        public virtual Company Company { get; set; }
     }
 }
